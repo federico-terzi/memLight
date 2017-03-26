@@ -4,35 +4,35 @@
 
 {% set active_page="settings" %}
 
-{% block pageName %}Settings{% endblock %}
+{% block pageName %}{% trans %}Settings{% endtrans %}{% endblock %}
 
-{% block contentTitle %}Settings{% endblock %}
+{% block contentTitle %}{% trans %}Settings{% endtrans %}{% endblock %}
 
 {% block content %}
 	{# If there is a message, render it #}
 	{% if message is not null %}
     	<div class="alert alert-success">
-    		<strong>Done!</strong> {{ message }}
+    		<strong>{% trans %}Done{% endtrans %}!</strong> {{ message|trans }}
     	</div>
     {% endif %}
     
     <!-- User Setting Form -->
 	<div class="panel panel-default">
-		<div class="panel-heading">Settings</div>
+		<div class="panel-heading">{% trans %}Settings{% endtrans %}</div>
 		<div class="panel-body">
 			{{ form_start(form) }}
                 {{ form_row(form.enable_reminder) }}
             
-                <button type="submit" class="btn btn-success">Save Settings</button>
+                <button type="submit" class="btn btn-success">{% trans %}Save Settings{% endtrans %}</button>
             {{ form_end(form) }}
 		</div>
 	</div>
 	
 	<!-- Settings Tools -->
 	<div class="panel panel-default">
-		<div class="panel-heading">Actions</div>
+		<div class="panel-heading">{% trans %}Actions{% endtrans %}</div>
 		<div class="panel-body">
-			<a href="{{ path('delete_recorded_answers') }}" class="btn btn-danger">Delete Progress Data</a>
+			<a href="{{ path('delete_recorded_answers') }}" class="btn btn-danger">{% trans %}Delete Progress Data{% endtrans %}</a>
 		</div>
 	</div>
 {% endblock %}
