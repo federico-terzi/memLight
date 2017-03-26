@@ -11,7 +11,7 @@
 	<div class="bg"></div>
 	<div class="jumbotron">
       <div class="container">
-        <h1 class="display-3">Welcome to memLight!</h1>
+        <h1 class="display-3">{% trans %}Welcome to memLight{% endtrans %}!</h1>
         <p>memLight is a powerful and easy tool designed to study effectively.</p>
         {% if app.user %}
         	<p><a class="btn btn-success btn-lg" href="{{ path('courses') }}" role="button">Start studying!</a></p>

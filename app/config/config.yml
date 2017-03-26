@@ -8,10 +8,12 @@ imports:
 parameters:
     locale: en
     courses_directory: '%kernel.root_dir%/../web/courses/'
+    app.version: 0.1.2
+    app.locales: en|it
 
 framework:
     #esi:             ~
-    #translator:      { fallbacks: ["%locale%"] }
+    translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
