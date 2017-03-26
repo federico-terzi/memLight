@@ -33,28 +33,28 @@ memLight - A Simple, Light-wight and Effective Way to Learn -
 			<ul class="nav navbar-nav">
 				{# Add pages to the navbar and, using the active_page variable, highlight the active page #}
 				<li {% if active_page=="home" %}class="active" {% endif %}><a href="{{ path('homepage') }}">
-					<span class="glyphicon glyphicon-home"></span> Home</a></li>
+					<span class="glyphicon glyphicon-home"></span> {% trans %}Home{% endtrans %}</a></li>
 				<li {% if active_page=="courses" %}class="active" {% endif %}><a href="{{ path('courses') }}">
-					<span class="glyphicon glyphicon-th-list"></span> Courses</a></li>
+					<span class="glyphicon glyphicon-th-list"></span> {% trans %}Courses{% endtrans %}</a></li>
 				<li {% if active_page=="stats" %}class="active" {% endif %}><a href="{{ path('stats') }}">
-					<span class="glyphicon glyphicon-signal"></span> Stats</a></li>
+					<span class="glyphicon glyphicon-signal"></span> {% trans %}Stats{% endtrans %}</a></li>
 				<li {% if active_page=="settings" %}class="active" {% endif %}><a href="{{ path('settings') }}">
-					<span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+					<span class="glyphicon glyphicon-cog"></span> {% trans %}Settings{% endtrans %}</a></li>
 				<li {% if active_page=="about" %}class="active" {% endif %}><a href="{{ path('about') }}">
-					<span class="glyphicon glyphicon-eye-open"></span> About</a></li>
+					<span class="glyphicon glyphicon-eye-open"></span> {% trans %}About{% endtrans %}</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				{# If the user is logged in, show the username and the logout button #}
 				{% if app.user %}
-				<li><p class="navbar-text">Logged as <b>{{ app.user.username }}</b></p></li>
+				<li><p class="navbar-text">{% trans %}Logged as{% endtrans %} <b>{{ app.user.username }}</b></p></li>
 				<li><a href="{{ path('logout') }}"><span
-						class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+						class="glyphicon glyphicon-log-out"></span> {% trans %}Logout{% endtrans %}</a></li>
 				{% else %}
 				{# If the user is NOT logged in, show a Register and a login button #}
 				<li><a href="{{ path('user_registration') }}"><span
-						class="glyphicon glyphicon-user"></span> Register</a></li>
+						class="glyphicon glyphicon-user"></span> {% trans %}Register{% endtrans %}</a></li>
 				<li><a href="{{ path('login') }}"><span
-						class="glyphicon glyphicon-log-in"></span> Login</a></li>
+						class="glyphicon glyphicon-log-in"></span> {% trans %}Login{% endtrans %}</a></li>
 				{% endif %}
 			</ul>
 		</div>

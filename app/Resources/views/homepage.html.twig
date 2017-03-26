@@ -12,11 +12,11 @@
 	<div class="jumbotron">
       <div class="container">
         <h1 class="display-3">{% trans %}Welcome to memLight{% endtrans %}!</h1>
-        <p>memLight is a powerful and easy tool designed to study effectively.</p>
+        <p>{% trans %}memLight is a powerful and easy tool designed to study effectively{% endtrans %}.</p>
         {% if app.user %}
-        	<p><a class="btn btn-success btn-lg" href="{{ path('courses') }}" role="button">Start studying!</a></p>
+        	<p><a class="btn btn-success btn-lg" href="{{ path('courses') }}" role="button">{% trans %}Start studying{% endtrans %}!</a></p>
         {% else %}
-        	<p><a class="btn btn-primary btn-lg" href="{{ path('user_registration') }}" role="button">Register Now</a></p>
+        	<p><a class="btn btn-primary btn-lg" href="{{ path('user_registration') }}" role="button">{% trans %}Register Now{% endtrans %}</a></p>
         {% endif %}
       </div>
     </div>
@@ -26,7 +26,7 @@
 	<div class="container text-center">
 		{# If not logged in, it shows a quick login form #}
         {% if app.user %}
-        	<h2><i>It's time to learn, <b>{{ app.user.username }}</b>!</i></h2>
+        	<h2><i>{% trans %}It's time to learn{% endtrans %}, <b>{{ app.user.username }}</b>!</i></h2>
         {% else %}
         	<div class="panel panel-primary">
     			<div class="panel-body">
@@ -50,19 +50,19 @@
 {% block content %}
 	<div class="row">
 		<div class="col-sm-4">
-			<h2>Learn by Repetition</h2>
+			<h2>{% trans %}Learn by Repetition{% endtrans %}</h2>
 			<img src="{{ asset('images/paper.png') }}" class="img-rounded homeImage" width="150"/>
-			<p>Repeating concepts is the easiest and most efficient way to learn new things.</p>
+			<p>{% trans %}Repeating concepts is the easiest and most efficient way to learn new things{% endtrans %}.</p>
 		</div>
 		<div class="col-sm-4">
-    		<h2>Track your progress</h2>
+    		<h2>{% trans %}Track your progress{% endtrans %}</h2>
 			<img src="{{ asset('images/chart.png') }}" class="img-rounded homeImage" width="150"/>
-			<p>Tracking your progress while you study is a great way to strengthen you weaknesses</p>
+			<p>{% trans %}Tracking your progress while you study is a great way to strengthen you weaknesses{% endtrans %}.</p>
 		</div>
 		<div class="col-sm-4">
-			<h2>Study your Subjects</h2>
+			<h2>{% trans %}Study your Subjects{% endtrans %}</h2>
 			<img src="{{ asset('images/think.png') }}" class="img-rounded homeImage" width="150"/>
-			<p>Study your subjects in a simple and convenient platform, made for students.</p>
+			<p>{% trans %}Study your subjects in a simple and convenient platform, made for students{% endtrans %}.</p>
 		</div>
 	</div>
 {% endblock %}
