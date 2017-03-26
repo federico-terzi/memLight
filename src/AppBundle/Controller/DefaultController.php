@@ -12,6 +12,7 @@
 
 namespace AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,8 +26,9 @@ class DefaultController extends Controller
 {
     /**
      * Render the Home page
-     * 
+     *
      * @Route("/", name="homepage")
+     * @Method("GET")
      */
     public function indexAction(Request $request)
     {
@@ -41,5 +43,15 @@ class DefaultController extends Controller
     public function aboutAction()
     {
     	return $this->render("about.html.twig");
+    }
+    
+    /**
+     * Change User Language ( change the locale )
+     *
+     * @Route("/lang/{_locale}", name="lang")
+     */
+    public function langAction()
+    {
+    	return $this->redirectToRoute('homepage');
     }
 }
