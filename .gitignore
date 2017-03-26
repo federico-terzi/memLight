@@ -11,3 +11,4 @@
 /bin/
 /composer.phar
 /.metadata/
+.settings/org.eclipse.core.resources.prefs

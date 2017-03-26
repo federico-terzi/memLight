@@ -8,6 +8,7 @@ Logged as: Ciao
 Login: Login
 Logout: Logout
 Register: Registrati
+
 #Homepage
 Welcome to memLight: Benvenuto su memLight
 memLight is a powerful and easy tool designed to study effectively: memLight è un potente strumento per studiare efficacemente
@@ -20,5 +21,44 @@ Study your Subjects: Studia le tue Materie
 Repeating concepts is the easiest and most efficient way to learn new things: Ripetere i concetti è il più facile ed efficente modo di imparare nuove cose
 Tracking your progress while you study is a great way to strengthen you weaknesses: Seguire i tuoi progressi mentre studi è un ottimo modo per rinforzare le tue debolezze
 Study your subjects in a simple and convenient platform, made for students: Studia le tue materie in una piattaforma semplice e comoda, fatta per gli studenti
+
 #Courses
 Author: Autore
+Course Panel: Pannello Corso
+Start a Test: Inizia un Test
+Question List: Lista Domande
+View Stats: Progressi
+There are no courses at the moment: Non ci sono corsi al momento
+
+#Course
+Course: Corso
+Study: Studia
+Test: Test
+This section provides a set of tools to learn and study the subject, before starting the testing phase: Questa sezione fornisce una serie di strumenti per imparare e studiare una materia, prima di iniziare con i test
+This section provides a set of tools to test and reinforce your comprehension by using repetition: Questa sezione fornisce una serie di strumenti per testare e rinforzare la tua comprensione usando la ripetizione
+View all Questions and Answers: Vedi tutte le Domande e Risposte
+Start a Quiz ( All Questions ): Inizia un Quiz ( Tutte le Domande )
+Quiz Most Mistaken: Quiz sulle più Sbagliate
+Continue the Quiz: Continua il Quiz
+
+#Stats
+Stats: Statistiche
+Select Course: Seleziona il Corso
+Your Progress: I tuoi Progressi
+Success Rate: Percentuale di Successo
+Last Tests: Ultimi Test
+Tools: Strumenti
+Select a course: Seleziona un corso
+Most Mistaken Answers: Domande più Sbagliate
+Question: Domanda
+Mistakes: Errori
+You don't have any answer saved: Non hai nessuna risposta salvata
+All Courses: Tutti i Corsi
+
+#Impostazioni
+Save Settings: Salva Impostazioni
+Enable reminder of an already started Quiz: Attiva l'avviso di Quiz già iniziato
+Actions: Azioni
+Delete Progress Data: Cancella i Progressi
+
+

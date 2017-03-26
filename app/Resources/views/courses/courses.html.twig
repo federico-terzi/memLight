@@ -4,9 +4,9 @@
 
 {% set active_page="courses" %}
 
-{% block pageName %}Courses{% endblock %}
+{% block pageName %}{% trans %}Courses{% endtrans %}{% endblock %}
 
-{% block contentTitle %}Courses{% endblock %}
+{% block contentTitle %}{% trans %}Courses{% endtrans %}{% endblock %}
 
 {% block content %}
 	{# If user is ADMIN, enable the creation of a new course #}
