@@ -10,13 +10,16 @@
     				
     			</span>
     			<span class="pull-right">
+    				<a href="{{ path("course", {'course_id' : course.id}) }}" class="btn btn-warning">
+    					<span class="glyphicon glyphicon-search"></span><div class="hidden-xs">Course Panel</div>
+    				</a>
     				<a href="{{ path("quiz", {'course_id' : course.id}) }}" class="btn btn-success">
     					<span class="glyphicon glyphicon-play"></span><div class="hidden-xs">Start a Test</div>
     				</a>
     				<a href="{{ path('list_questions', {'course_id': course.id }) }}" class="btn btn-info">
     					<span class="glyphicon glyphicon-th-list"></span><div class="hidden-xs">Question List</div>
     				</a>
-    				<a href="{{ path('stats', {'course_id': course.id}) }}" class="btn btn-warning">
+    				<a href="{{ path('stats', {'course_id': course.id}) }}" class="btn btn-primary">
     					<span class="glyphicon glyphicon-signal"></span><div class="hidden-xs">View Stats</div>
     				</a>
     				

@@ -45,6 +45,10 @@
     				{% endif %}
     				
     				<p><a href="{{ path("quiz", {'course_id' : course.id}) }}" class="btn btn-success"><span class="glyphicon glyphicon-play-circle"></span> Start a Quiz ( All Questions )</a></p>
+        			
+                    {% if app.user %}
+                    	<a href="{{ path('mistaken_quiz', { 'course_id' : course.id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-fire"></span> Quiz Most Mistaken!</a>
+                    {% endif %}
         		</div>
         	</div>
 		</div>
