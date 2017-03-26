@@ -1,0 +1,55 @@
+{% extends 'layout.html.twig' %}
+
+{# Edit Course Page: basically the control page of a course
+                     show a list of questions and options to edit information #}
+
+{% set active_page="courses" %}
+
+{% block pageName %}Edit Course{% endblock %}
+
+{% block contentTitle %}Edit - {{ course.name }}{% endblock %}
+
+{% block content %}
+	{# Tools to edit a course #}
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<a href="{{ path('add_question', {'course_id': course.id }) }}" class="btn btn-success">
+    			<span class="glyphicon glyphicon-plus-sign"></span> Add Question
+    		</a>
+			<a href="{{ path('edit_course_info', {'course_id': course.id }) }}" class="btn btn-warning">
+    			<span class="glyphicon glyphicon-pencil"></span> Edit Course Info
+    		</a>
+    		<a href="{{ path('warning_delete_course', {'course_id': course.id }) }}" class="btn btn-danger">
+    			<span class="glyphicon glyphicon-remove"></span> Delete Course
+    		</a>
+    	</div>
+	</div>
+	{# Render a question list #}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Questions
+		</div>
+		<div class="panel-body">
+			{{ render(controller('AppBundle:Edit:editQuestionList', {'course': course })) }}
+		</div>
+	</div>
+{% endblock %}
+
+{# Js needed for the delete confirmation of a question #}
+{% block javascripts %}
+<script>
+	// Destination url to remove a question with a XXX placeholder
+    var removeUrl = "{{ path('remove_question',{'question_id' : 'XXX'}) }}";
+    
+    $('.delete-btn' ).click(function() {
+        // Ask for confirmation
+    	if (confirm('Do you really want to delete the question?')) {
+    		console.log(this.id);
+    		// Get the question ID
+    		var questionId = this.id.split("_")[1];
+    		// Replace the placeholder and go to location
+     		window.location.href = removeUrl.replace('XXX', questionId);
+    	}
+    });
+</script>
+{% endblock %}

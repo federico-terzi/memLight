@@ -1,0 +1,24 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{# Registration: render a form to register #}
+
+{% extends 'layout.html.twig' %}
+
+{% block pageName %}Registration{% endblock %}
+
+{% block contentTitle %}Registration{% endblock %}
+
+{% block content %}
+	<div class="loginContentDiv">
+		{# Render the form #}
+        {{ form_start(form) }}
+            {{ form_row(form.username) }}
+            {{ form_row(form.fullName) }}
+            {{ form_row(form.plainPassword.first) }}
+            {{ form_row(form.plainPassword.second) }}
+        
+            <button type="submit" class="btn btn-success btn-lg">Register!</button>
+        {{ form_end(form) }}
+	</div>
+
+{% endblock %}

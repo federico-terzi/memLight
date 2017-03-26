@@ -1,0 +1,36 @@
+{# Render the list of questions for a specific course #}
+
+{% if questions %}
+	{% for question in questions %}
+		<div class="panel panel-primary">
+			{# Print the question number and text#}
+			<div class="panel-heading">({{ question.questionNumber }}) {{ question.questionText }}</div>
+			<div class="panel-body">   			
+				{# If there is a question image, render it #}
+	            {% if question.questionUrl is not null %}
+        		    {% set image_path = '/courses/'~ question.course.id ~ '/' ~ question.questionUrl %}
+            		<a href="#" data-featherlight={{ asset(image_path) }}>
+            			<img src="{{ asset(image_path) }}" class="questionListImg" />
+            		</a>
+            		<hr>
+        		{% endif %}
+            	
+            	{# If there is an answer text, render it#}
+            	{% if question.answerText is not null %}
+            		<p>{{ question.answerText }}</p>
+            	{% endif %}
+            	
+            	{# If there is an answer image, render it #}
+        		{% if question.answerUrl is not null %}
+        		    {% set image_path = '/courses/'~ question.course.id ~ '/' ~ question.answerUrl %}
+            		<a href="#" data-featherlight={{ asset(image_path) }}>
+            			<img src="{{ asset(image_path) }}" class="questionListImg" />
+            		</a>
+        		{% endif %}
+    		</div>
+		</div>
+	{% endfor %}
+{% else %}
+	{# If there are no questions in the course #}
+	<p>There are no questions in this course...</p>
+{% endif %}

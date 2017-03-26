@@ -1,0 +1,30 @@
+{% extends 'layout.html.twig' %}
+
+{# About Page: what is memlight and credits #}
+
+{% set active_page="about" %}
+
+{% block pageName %}About memLight{% endblock %}
+
+{% block contentTitle %}About memLight{% endblock %}
+
+{% block content %}
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<blockquote>memLight is a great way to study subjects where you need to memorize big chunks of information.</blockquote>
+			
+			<hr>
+			<h4>Credits</h4>
+			<p>
+				memLight was developed by <a href="https://github.com/federico-terzi" target="_blank" >Federico Terzi</a>, and is Open Source! 
+				so <a href="https://github.com/federico-terzi/memLight" target="_blank"> Check it out on GitHub!</a>
+			</p>
+			<p>
+				Home image by Ritesh Man Tamrakar -
+				<a href="https://flic.kr/p/9ubMGU" target="_blank" >Flickr Profile</a>
+			</p>
+			<p>Emoji provided free by http://emojione.com</p>
+			<p>Flame by Nadav Barkan from the Noun Project</p>
+		</div>
+	</div>
+{% endblock %}

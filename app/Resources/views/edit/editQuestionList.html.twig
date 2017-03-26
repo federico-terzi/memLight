@@ -1,0 +1,45 @@
+{# Render a table with all questions for a specific course #}
+
+{% if questions %}
+	<table class="table table-striped text-left">
+		<thead>
+			<tr>
+    			<th>N</th>
+    			<th>Type</th>
+    			<th>Question Text</th>
+    			<th>Question Url</th>
+    			<th>Answer Text</th>
+    			<th>Answer Url</th>
+    			<th>Version</th>
+    			<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for question in questions %}
+				<tr>
+					<td>{{ question.questionNumber }}</td>
+					<td>{{ question.questionType }}</td>
+					<td>{{ question.questionText }}</td>
+					
+					{% set question_path = '/courses/'~ question.course.id ~ '/' ~ question.questionUrl %}
+					<td><a href="#" data-featherlight={{ asset(question_path) }}>{{ question.questionUrl }}</a></td>
+					<td>{{ question.answerText }}</td>
+					
+					{% set answer_path = '/courses/'~ question.course.id ~ '/' ~ question.answerUrl %}
+					<td><a href="#" data-featherlight={{ asset(answer_path) }}>{{ question.answerUrl }}</a></td>
+					<td>{{ question.version }}</td>
+					<td>
+						<a href="{{ path('edit_question',{'question_id' : question.id}) }}" class="btn btn-success btn-xs" data-toggle="tooltip" title="Edit Question">
+        					<span class="glyphicon glyphicon-pencil"></span>
+        				</a>
+        				<a href="#" id="remove_{{ question.id }}" class="btn btn-danger btn-xs delete-btn" data-toggle="tooltip" title="Remove Question">
+        					<span class="glyphicon glyphicon-remove"></span>
+        				</a>
+					</td>
+				</tr>
+        	{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>There are no questions in this course...</p>
+{% endif %}

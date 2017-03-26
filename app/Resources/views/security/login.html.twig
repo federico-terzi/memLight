@@ -1,0 +1,36 @@
+{% extends 'layout.html.twig' %}
+
+{# Login Page: render a form to login #}
+
+{% block pageName %}Login{% endblock %}
+
+{% block contentTitle %}Login{% endblock %}
+
+{% block content %}
+	<div class="panel panel-default">
+		<div class="panel-body">
+			{# If there is an error, render it #}
+			{% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            <form action="{{ path('login') }}" method="post">
+            	<div class="form-group">
+                    <label for="username" >Username:</label>
+                    <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control" autofocus/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="_password" class="form-control"/>
+        		</div>
+                <button type="submit" class="btn btn-success">Login</button>
+            </form>
+		</div>
+	</div>
+	<div class="panel panel-primary">
+		<div class="panel-body">
+			<p><strong>Don't have an account?</strong></p>
+			<a href="{{ path('user_registration') }}" class="btn btn-success btn-lg">Register Now!</a>
+		</div>
+	</div>
+
+{% endblock %}

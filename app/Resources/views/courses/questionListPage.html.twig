@@ -1,0 +1,16 @@
+{% extends 'layout.html.twig' %}
+
+{# Question List Page: show a list of questions for the specified course #}
+
+{% set active_page="courses" %}
+
+{% block pageName %}{{ course.name }} - Question List{% endblock %}
+
+{% block contentTitle %}{{ course.name }}{% endblock %}
+
+{% block content %}
+	<h3>Questions and Answers List</h3>
+	
+	{# Render the question list #}
+	{{ render(controller('AppBundle:Courses:questionList', {'course': course })) }}
+{% endblock %}

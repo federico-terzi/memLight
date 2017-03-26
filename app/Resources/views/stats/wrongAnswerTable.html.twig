@@ -1,0 +1,28 @@
+{# Render a table with the most mistaken questions #}
+{% if answers %}
+	<table class="table table-striped">
+    	<thead>
+          <tr>
+            <th>Course</th>
+            <th>Question</th>
+            <th>Mistakes</th>
+          </tr>
+        </thead>
+        <tbody>
+        	{% for answer in answers %}
+        		<tr>
+        			<td>{{ answer[0].course.name }}</td>
+        			<td>{{ answer[0].questionText }}</td>
+        			<td>{{ answer[1] }}</td>
+        		</tr>
+        	{% endfor %}
+    	</tbody>
+	</table>
+	{#
+	{% for answer in answers %}
+		<p>{{ dump(answer) }}</p>
+	{% endfor %}
+	#}
+{% else %}
+	<p>You don't have any answer saved...</p>
+{% endif %}

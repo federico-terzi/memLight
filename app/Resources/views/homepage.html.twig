@@ -1,0 +1,107 @@
+{% extends 'layout.html.twig' %}
+
+{# Homepage #}
+
+{% set active_page="home" %}
+
+{% block pageName %}Homepage{% endblock %}
+
+{# Define a jumboHeader #}
+{% block jumboHeader %}
+	<div class="bg"></div>
+	<div class="jumbotron">
+      <div class="container">
+        <h1 class="display-3">Welcome to memLight!</h1>
+        <p>memLight is a powerful and easy tool designed to study effectively.</p>
+        {% if app.user %}
+        	<p><a class="btn btn-success btn-lg" href="{{ path('courses') }}" role="button">Start studying!</a></p>
+        {% else %}
+        	<p><a class="btn btn-primary btn-lg" href="{{ path('user_registration') }}" role="button">Register Now</a></p>
+        {% endif %}
+      </div>
+    </div>
+{% endblock %}
+
+{% block preContent %}
+	<div class="container text-center">
+		{# If not logged in, it shows a quick login form #}
+        {% if app.user %}
+        	<h2><i>It's time to learn, <b>{{ app.user.username }}</b>!</i></h2>
+        {% else %}
+        	<div class="panel panel-primary">
+    			<div class="panel-body">
+    			<form class="form-inline" action="{{ path('login') }}" method="post">
+        			<div class="form-group">
+        				<label for="username">Username:</label>
+        				<input type="text" class="form-control" id="username" name="_username" autofocus/>
+        			</div>
+        			<div class="form-group">
+        				<label for="password">Password:</label> 
+        				<input type="password" class="form-control" id="password" name="_password">
+        			</div>
+        			<button type="submit" class="btn btn-primary">Login</button>
+    			</form>
+    			</div>
+    		</div>
+		{% endif %}
+	</div>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-sm-4">
+			<h2>Learn by Repetition</h2>
+			<img src="{{ asset('images/paper.png') }}" class="img-rounded homeImage" width="150"/>
+			<p>Repeating concepts is the easiest and most efficient way to learn new things.</p>
+		</div>
+		<div class="col-sm-4">
+    		<h2>Track your progress</h2>
+			<img src="{{ asset('images/chart.png') }}" class="img-rounded homeImage" width="150"/>
+			<p>Tracking your progress while you study is a great way to strengthen you weaknesses</p>
+		</div>
+		<div class="col-sm-4">
+			<h2>Study your Subjects</h2>
+			<img src="{{ asset('images/think.png') }}" class="img-rounded homeImage" width="150"/>
+			<p>Study your subjects in a simple and convenient platform, made for students.</p>
+		</div>
+	</div>
+{% endblock %}
+
+{# Custom css for the Homepage #}
+{% block stylesheets %}
+<style>
+    .bg {
+        background: url('{{ asset("images/background.jpg" )}}') no-repeat center center;
+        background-size:cover;
+        position: fixed;
+        width: 100%;
+        height: 460px; /*same height as jumbotron */
+        top:0;
+        left:0;
+        z-index: -1;
+    }
+    
+    .jumbotron {
+        height: 400px;
+        color: white;
+        text-shadow: #444 0 1px 1px;
+        background:transparent;
+    }
+</style>
+{% endblock %}
+
+{# Custom js for the Homepage #}
+{% block javascripts %}
+<script>
+	// Used for Parallax effect
+    var jumboHeight = $('.jumbotron').outerHeight();
+    function parallax(){
+        var scrolled = $(window).scrollTop();
+        $('.bg').css('height', (jumboHeight-scrolled+60) + 'px');
+    }
+    
+    $(window).scroll(function(e){
+        parallax();
+    });
+</script>
+{% endblock %}

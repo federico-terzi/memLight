@@ -1,0 +1,25 @@
+{% extends 'layout.html.twig' %}
+
+{# Courses Page: show a list of all Courses #}
+
+{% set active_page="courses" %}
+
+{% block pageName %}Courses{% endblock %}
+
+{% block contentTitle %}Courses{% endblock %}
+
+{% block content %}
+	{# If user is ADMIN, enable the creation of a new course #}
+	{% if is_granted('ROLE_ADMIN') %}
+    	<div class="panel panel-default">
+    		<div class="panel-body">
+    			<a href="{{ path('add_course') }}" class="btn btn-success">
+    				<span class="glyphicon glyphicon-plus-sign"></span> New Course
+    			</a>
+    		</div>
+    	</div>
+    {% endif %}
+    
+    {{ render(controller('AppBundle:Courses:coursesTable')) }}
+
+{% endblock %}

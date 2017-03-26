@@ -1,0 +1,22 @@
+{% extends 'layout.html.twig' %}
+
+{# Warning Delete Course: render a confirmation button to avoid accidental deletion of a course#}
+
+{% set active_page="courses" %}
+
+{% block pageName %}Delete Course{% endblock %}
+
+{% block contentTitle %}Delete Course{% endblock %}
+
+{% block content %}
+	<div class="panel panel-danger">
+		<div class="panel-heading">Do you really want to delete this course?</div>
+		<div class="panel-body">
+            <h4>"{{ course.name }}"</h4>
+            <br>
+			<a href="{{ path('delete_course', {'course_id': course.id }) }}" class="btn btn-danger btn-lg">
+    			<span class="glyphicon glyphicon-remove"></span> Remove Course
+    		</a>
+		</div>
+	</div>
+{% endblock %}

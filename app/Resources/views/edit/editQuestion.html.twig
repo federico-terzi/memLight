@@ -1,0 +1,70 @@
+{% extends 'layout.html.twig' %}
+
+{# Edit Question: render a form to edit question information #}
+
+{% set active_page="courses" %}
+
+{% block pageName %}Edit Question{% endblock %}
+
+{% block contentTitle %}Edit Question{% endblock %}
+
+{% block content %}
+	<div class="panel panel-info">
+		<div class="panel-heading">Edit Question</div>
+		<div class="panel-body">
+			{# Render the form #}
+            {{ form_start(form) }}
+            	{{ form_errors(form) }}
+            	
+            	{{ form_row(form.questionType) }}
+            	
+            	<div id="widget-container" forField="questionText">
+            	    {{ form_row(form.questionText) }}
+            	</div>
+            	
+            	<div id="widget-container" forField="questionUrl">
+            	    {{ form_row(form.questionUrl) }}
+            	    
+            	    {# If there is a question image, render it #}
+            	    {% if form.vars.value.questionUrl is not null %}
+                		{% set image_path = '/courses/'~ form.vars.value.course.id ~ '/' ~ form.vars.value.questionUrl %}
+                    	<div class="form-group">
+                        	<a href="#" data-featherlight={{ asset(image_path) }}>
+                    			<img src="{{ asset(image_path) }}" class="img-thumbnail" alt="Question URL" width="304" height="236">
+                    		</a>
+                    	</div>
+            	    {% endif %}
+            	</div>
+            	
+            	<div id="widget-container" forField="answerText">
+            	    {{ form_row(form.answerText) }}
+            	</div>
+            	
+            	<div id="widget-container" forField="answerUrl">
+            	    {{ form_row(form.answerUrl) }}
+            	    
+            	    {# if there is an answer image, render it #}
+            	    {% if form.vars.value.answerUrl is not null %}
+                    	{% set image_path = '/courses/'~ form.vars.value.course.id ~ '/' ~ form.vars.value.answerUrl %}
+                    	<div class="form-group">
+                        	<a href="#" data-featherlight={{ asset(image_path) }}>
+                    			<img src="{{ asset(image_path) }}" class="img-thumbnail" alt="Answer URL" width="304" height="236">
+                    		</a>
+                    	</div>
+            		{% endif %}
+				</div>            	
+            	
+            	<div class="form-group">
+                	<button type="submit" class="btn btn-success btn-lg">Save Question</button>
+                </div>
+            {{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}
+
+{# Include the js needed to make the field appear/disappear based on the question type #}
+{% block javascripts %}
+    <script>
+    	{% include 'scripts/question-module.js' %}
+    </script>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'layout.html.twig' %}
+
+{# Stats Page: render various types of progress data#}
+
+{% set active_page="stats" %}
+
+{% block pageName %}Stats{% endblock %}
+
+{% block contentTitle %}Stats{% endblock %}
+
+{% block content %}
+	<!-- Select Course DIV -->
+	<div class="panel panel-default">
+		<div class="panel-body">
+            <form class="form-inline">
+            	<div class="form-group">
+                    <label for="course">Select Course: </label>
+                    
+                    {# Render a drop down with all the courses #}
+                    {{ render(controller('AppBundle:Stats:coursesDropdown', {'course_id': course_id })) }}
+                </div>
+            </form>
+		</div>
+	</div>
+	
+	<!-- Google Chart DIV -->
+	<div class="panel panel-warning">
+		<div class="panel-heading">Your Progress</div>
+		<div class="panel-body">
+			<div id="chart_div"></div>
+		</div>
+	</div>
+
+	<div class="row">
+		<!-- Tools DIV -->
+		<div class="col-sm-4">
+			<div class="panel panel-success">
+        		<div class="panel-heading">Tools</div>
+        		<div class="panel-body">
+        			{# If a course is selected, provides a link to start a quiz with the most mistaken #}
+        			{% if course_id is not null %}
+                    	<a href="{{ path('mistaken_quiz', { 'course_id' : course_id }) }}" class="btn btn-success btn-lg">Quiz Most Mistaken!</a>
+                    {% else %}
+                    	<p>Select a course...</p>
+                    {% endif %}
+        		</div>
+        	</div>
+		</div>
+		
+		<!-- Most Mistaken Questions DIV -->
+		<div class="col-sm-8">
+			<div class="panel panel-danger">
+        		<div class="panel-heading">Most Mistaken Answers</div>
+        		<div class="panel-body text-left">
+        			{# Render a table with the most mistaken questions #}
+                    {{ render(controller('AppBundle:Stats:wrongAnswerTable', {'course_id': course_id })) }}
+        		</div>
+        	</div>
+		</div>
+	</div>
+{% endblock %}
+
+{# JS needed for the Google Chart #}
+{% block javascripts %}
+<script>
+	// Reload the page if another course is selected
+	$('#course').change(function() {
+		var url = "{{ path('stats') }}/" + this.value;
+		window.location = url;
+	});
+
+	// Google Chart JS
+	google.charts.load('current', {packages: ['corechart', 'line']});
+	google.charts.setOnLoadCallback(drawBasic);
+
+	function drawBasic() {
+
+	      var data = new google.visualization.DataTable();
+	      data.addColumn('number', 'X');
+	      data.addColumn('number', 'Success %');
+
+	      data.addRows([
+	    	  {{ render(controller('AppBundle:Stats:successRates', {'course_id': course_id })) }}
+	      ]);
+
+	      var options = {
+	        hAxis: {
+	          title: 'Last Tests',
+	       	  direction: '-1'
+	        },
+	        vAxis: {
+	          title: 'Success Rate'
+	        }
+	      };
+
+	      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+	      chart.draw(data, options);
+	    }
+	
+</script>
+{% endblock %}

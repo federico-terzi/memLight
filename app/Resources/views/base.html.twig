@@ -1,0 +1,60 @@
+{# Base template, common to all pages #}
+
+<!DOCTYPE html>
+<html>
+    <head>
+    	<!-- memLight v{{ version }} - by Federico Terzi -->
+    
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        {# the block "title" defines the title of the page #}
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+        
+        <!-- Featherlight -->
+        <link href="//cdn.rawgit.com/noelboss/featherlight/1.7.1/release/featherlight.min.css" type="text/css" rel="stylesheet" />
+        
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        
+        <!-- Custom css -->
+        <link rel="stylesheet" href="{{ asset('style.css') }}">
+        
+        {# This block is used when a page needs to include some custom css #}
+        {% block stylesheets %}{% endblock %}
+        
+        <!-- Emoji provided free by EmojiOne -->
+                 
+    </head>
+    <body>
+    	{# This block contains the content of a page #}
+        {% block body %}{% endblock %}
+         
+        <!-- jQuery -->
+        <script src="//code.jquery.com/jquery-latest.js"></script>
+        
+        <!-- Featherlight -->
+		<script src="//cdn.rawgit.com/noelboss/featherlight/1.7.1/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+         
+		<!-- Bootstrap -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		
+		<!-- Google Charts  -->
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    	
+    	{# This block is used when a page needs to add custom javascript #}
+        {% block javascripts %}{% endblock %}
+    	
+    	<script>
+			// Used to enable bootstrap Tooltips
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip(); 
+            });
+        </script>
+    </body>
+</html>

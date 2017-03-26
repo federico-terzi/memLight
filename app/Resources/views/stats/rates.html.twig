@@ -1,0 +1,7 @@
+{# Render rates array for Google Chart #}
+{% for rate in rates %}
+	[{{ loop.index0 }}, {{ rate[1] }}]
+	{% if not loop.last %}
+		,
+	{% endif %}
+{% endfor %}

@@ -1,0 +1,11 @@
+{# Render a dropdown with all courses #}
+<select class="form-control" id="course">
+    <option value="all">All Courses</option>
+    {% for course in courses %}
+    	<option value="{{ course.id }}"
+        	{% if course.id == course_id %}
+        		selected="selected"
+        	{% endif %}>
+    	{{ course.name }}</option>
+    {% endfor %}
+</select>

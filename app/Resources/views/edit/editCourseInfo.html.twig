@@ -1,0 +1,29 @@
+{% extends 'layout.html.twig' %}
+
+{# Edit Course Info: render a form to edit course information #}
+
+{% set active_page="courses" %}
+
+{% block pageName %}Edit Course Info{% endblock %}
+
+{% block contentTitle %}Edit Course Info{% endblock %}
+
+{% block content %}
+	<div class="panel panel-info">
+		<div class="panel-heading">Edit Course</div>
+		<div class="panel-body">
+			{# Render the form #}
+            {{ form_start(form) }}
+            	{{ form_errors(form) }}
+            
+                {{ form_row(form.name) }}
+            	{{ form_row(form.description) }}
+            	{{ form_row(form.longDescription) }}
+            	
+            	<div class="form-group">
+                	<button type="submit" class="btn btn-success btn-lg">Save Course</button>
+                </div>
+            {{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}

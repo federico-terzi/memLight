@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{# Layout: Defines the common layout for all pages #}
+
+{# active_page is used to define which page in the navbar is currently active #}
+{% if active_page is not defined %}
+	{% set active_page="none" %}
+{% endif %}
+
+{# Defines the title of the page #}
+{% block title %}
+memLight - A Simple, Light-wight and Effective Way to Learn -
+    {% block pageName %}
+    Home
+    {% endblock %}
+{% endblock %}
+
+{% block body %}
+{# Navigation bar #}
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-left" href="{{ path('homepage') }}">
+				<img src="{{ asset('images/small-logo.png') }}" class="logo-icon"/>
+			</a>
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target="#myNavbar">
+				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav">
+				{# Add pages to the navbar and, using the active_page variable, highlight the active page #}
+				<li {% if active_page=="home" %}class="active" {% endif %}><a href="{{ path('homepage') }}">
+					<span class="glyphicon glyphicon-home"></span> Home</a></li>
+				<li {% if active_page=="courses" %}class="active" {% endif %}><a href="{{ path('courses') }}">
+					<span class="glyphicon glyphicon-th-list"></span> Courses</a></li>
+				<li {% if active_page=="stats" %}class="active" {% endif %}><a href="{{ path('stats') }}">
+					<span class="glyphicon glyphicon-signal"></span> Stats</a></li>
+				<li {% if active_page=="settings" %}class="active" {% endif %}><a href="{{ path('settings') }}">
+					<span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+				<li {% if active_page=="about" %}class="active" {% endif %}><a href="{{ path('about') }}">
+					<span class="glyphicon glyphicon-eye-open"></span> About</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				{# If the user is logged in, show the username and the logout button #}
+				{% if app.user %}
+				<li><p class="navbar-text">Logged as <b>{{ app.user.username }}</b></p></li>
+				<li><a href="{{ path('logout') }}"><span
+						class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+				{% else %}
+				{# If the user is NOT logged in, show a Register and a login button #}
+				<li><a href="{{ path('user_registration') }}"><span
+						class="glyphicon glyphicon-user"></span> Register</a></li>
+				<li><a href="{{ path('login') }}"><span
+						class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</nav>
+
+{# Used to include a jumboHeader to pages #}
+{% block jumboHeader %}
+{% endblock %}
+
+{# Content that goes between the jumboHeader and the content #}
+{% block preContent %}
+{% endblock %}
+
+<div class="container">
+	<h1 class="text-center display-4">
+		{# Heading containing the title of the page #}
+		{% block contentTitle %}
+		{% endblock %}
+	</h1>
+</div>
+
+<div class="container text-center">
+	{# Content of the page #}
+	{% block content %}
+	{% endblock %}
+</div>
+
+{# Page footer #}
+<footer class="footer">
+	<div class="container">
+		<p class="text-muted">memLight is opensource, so 
+			<a href="https://github.com/federico-terzi/memLight" target="_blank"> Check it out on GitHub!</a>
+			Copyright (C) <a href="https://github.com/federico-terzi" target="_blank" >Federico Terzi</a> 2017</p>
+	</div>
+</footer>
+
+{% endblock %}

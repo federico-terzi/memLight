@@ -1,0 +1,50 @@
+{% extends 'layout.html.twig' %}
+
+{# Add Question: render a form to add a new question#}
+
+{% set active_page="courses" %}
+
+{% block pageName %}Add Question{% endblock %}
+
+{% block contentTitle %}Add Question{% endblock %}
+
+{% block content %}
+	<div class="panel panel-info">
+		<div class="panel-heading">Add Question</div>
+		<div class="panel-body">
+			{# Render the form #}
+            {{ form_start(form) }}
+            	{{ form_errors(form) }}
+            	
+                {{ form_row(form.questionType) }}
+                
+                <div id="widget-container" forField="questionText">
+            	    {{ form_row(form.questionText) }}
+            	</div>
+            	
+            	<div id="widget-container" forField="questionUrl">
+            	    {{ form_row(form.questionUrl) }}
+            	</div>
+            	
+            	<div id="widget-container" forField="answerText">
+            	    {{ form_row(form.answerText) }}
+            	</div>
+            	
+            	<div id="widget-container" forField="answerUrl">
+            	    {{ form_row(form.answerUrl) }}
+				</div>
+				
+            	<div class="form-group">
+                	<button type="submit" class="btn btn-success btn-lg">Save Question</button>
+                </div>
+            {{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}
+
+{# Include the js needed to make the field appear/disappear based on the question type #}
+{% block javascripts %}
+    <script>
+    	{% include 'scripts/question-module.js' %}
+    </script>
+{% endblock %}

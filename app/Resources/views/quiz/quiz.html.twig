@@ -1,0 +1,510 @@
+{% extends 'layout.html.twig' %}
+
+{# Quiz Page: render the quiz #}
+
+{% block pageName %}{{ course.name }} - Quiz{% endblock %}
+
+{% block contentTitle %}{{ course.name }} - Quiz{% endblock %}
+
+{% block content %}
+	{% if questions %}
+			<div class="progress" id="progressBarDiv">
+              <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" style="width:100%" id="progressbar">
+                <span id="progressbar-label">Loading...</span>
+              </div>
+            </div>
+    		<div class="panel-group text-center">
+        		<div class="panel panel-primary quizDiv">
+    				<div class="panel-heading">Question</div>
+        			<div class="panel-body">
+        				<!-- Loading bar visible when images are loading -->
+        				<img src="{{ asset('images/loadingBar.gif') }}" id="loadingImage"/>
+            			<p class="quizQuestionLabel" id="loadingLabel">Loading...</p>
+            			
+            			<!-- Question DIVs -->
+            			{# Create a separate div for each question 
+            			   Based on the current question, most of the div will be invisible except
+            			   for the current one 
+            			#}
+            			{% for question in questions %}
+            				{# Each div will have a differend id, EXAMPLE: QUESTION_12 #}
+            				<div class="quizLoadedDiv" id="QUESTION_{{ loop.index0 }}">
+            					{# If there is a question text, render it #}
+                				{% if question.questionText is not null %}
+                					<span class="quizQuestionLabel">{{ question.questionText }}</span>
+                				{% endif %}
+                				
+                				{# If there is a question image, render it#}
+                				{% if question.questionUrl is not null %}
+                				    {% set image_path = '/courses/'~ question.course.id ~ '/' ~ question.questionUrl %}
+                					<a href="#" data-featherlight={{ asset(image_path) }}>
+                            			<img src="{{ asset(image_path) }}" class="questionListImg" />
+                            		</a>
+                            	{% endif %}
+                			</div>
+                		{% endfor %}
+        			</div>
+        		</div>
+        		<div class="panel panel-primary quizDiv hidden" id="answerDiv">
+    				<div class="panel-heading">Answer</div>
+        			<div class="panel-body">
+            			<a href="#" id="showAnswerBtn" class="btn btn-lg btn-success">Click here to Show the Answer</a>
+            			
+            			<!-- Answer DIVs -->
+            			{# Create a separate div for each answer 
+            			   Based on the current answer, most of the div will be invisible except
+            			   for the current one 
+            			#}
+            			{% for question in questions %}
+            				{# Each div will have a differend id, EXAMPLE: ANSWER_12 #}
+            				<div class="quizLoadedDiv" id="ANSWER_{{ loop.index0 }}">
+            					{# If the question has an answer text, render it #}
+                				{% if question.answerText is not null %}
+                					<p class="quizAnswerLabel">{{ question.answerText }}</p>
+                				{% endif %}
+                				
+                				{# If the question has an answer image, render it#}
+                				{% if question.answerUrl is not null %}
+                					{% set image_path = '/courses/'~ question.course.id ~ '/' ~ question.answerUrl %}
+                					<a href="#" data-featherlight={{ asset(image_path) }}>
+                            			<img src="{{ asset(image_path) }}" class="questionListImg" />
+                            		</a>
+                				{% endif %}
+                			</div>
+                		{% endfor %}
+                		
+                		<!-- Div containing the buttons -->
+                		<div class="quizAnswerBtnDiv">
+                			<a href="#"><img src="{{ asset('images/buttons/correct.png') }}" class="quizAnswerBtnImg" id="correctBtn"/></a>
+                			<a href="#"><img src="{{ asset('images/buttons/wrong.png') }}" class="quizAnswerBtnImg" id="wrongBtn"/></a>
+                		</div>
+                	</div>
+        		</div>
+    		</div>
+    		<div class="row">
+    			<div class="col-sm-6">
+    			
+    				<!-- Status div, contains the label that will show quiz progress -->
+    				<div class="panel panel-success quizDiv">
+        				<div class="panel-heading">Status</div>
+            			<div class="panel-body">
+            				<table class="table table-condensed text-left noMarginBottom">
+            					<tr>
+            						<td>Question</td>
+            						<td><span id="statusLabelQuestion"></span></td>
+            					</tr>
+            					<tr>
+            						<td>Correct</td>
+            						<td><span id="statusLabelCorrect"></span></td>
+            					</tr>
+            					<tr>
+            						<td>Wrong</td>
+            						<td><span id="statusLabelWrong"></span></td>
+            					</tr>
+            				</table>
+            			</div>
+            		</div>
+    			</div>
+    			<div class="col-sm-6">
+    				
+    				<!-- Keyboard shortcuts div, invisible on mobile -->
+    				<div class="panel panel-warning quizDiv hidden-xs text-left">
+        				<div class="panel-heading">Keyboard Shortcuts</div>
+            			<div class="panel-body">
+            				<ul>
+            					<li>Show the Answer -> <kbd>[ Space Bar ]</kbd> </li>
+            					<li>Correct Answer -> <kbd>[ C ]</kbd> </li>
+            					<li>Wrong Answer -> <kbd>[ W ]</kbd> </li>
+            					<li>Undo Answer -> <kbd>[ U ]</kbd> </li>
+            				</ul>
+            			</div>
+            		</div>
+    			</div>
+    		</div>
+    		
+    		<!-- Summary DIV, visible only at the end of the quiz -->
+    		<div class="panel panel-primary hidden" id="summaryBox">
+				<div class="panel-heading">Quiz Finished - Summary</div>
+    			<div class="panel-body">
+    				<a href="{{ path('quiz', {'course_id': course.id}) }}" class="btn btn-success"><span class="glyphicon glyphicon-repeat"></span> Repeat the Quiz</a>
+    			</div>
+    		</div>
+    {% else %}
+    	{# If there are no questions #}
+    	<p>There are no questions...</p>
+    {% endif %}
+{% endblock %}
+
+{# Contains the js needed to make the quiz work #}
+{% block javascripts %}
+    <script>
+
+		// Total number of questions in the course
+    	var totalQuestions = {{ questions|length }};
+
+    	// Course id
+    	var course = {{ course.id }};
+
+    	// Alert the user about an already started quiz
+    	var alertRecoverQuiz = {{ quizParams.recover ? 'true':'false' }};
+
+    	// AJAX request url used to save a quiz
+    	var saveQuizUrl = "{{ url('save_quiz', {'course_id':course.id}) }}";
+
+    	// If the quiz is ended, this is true
+    	var isQuizEnded = false;
+
+    	// Count the number of answered questions ( totalQuestions + wrongQuestions )
+    	var realTotal = totalQuestions;
+
+    	// Array that will contain question numbers
+    	var questions = [];
+
+    	// Array that will contain all the question history ( Used for the undo function )
+    	var questionHistory = [];
+
+		// Count the number of questions answered
+		var totalCount = 0;
+
+		// Count the number of questions answered correctly
+    	var correctCount = 0;
+
+    	// Count the number of questions answered not correctly
+    	var wrongCount = 0;
+    	
+        $( document ).ready(function() {
+        	console.log( "Page Ready, loading the questions..." );
+
+			// Add all the question numbers
+        	for(var i = 0; i<totalQuestions; i++)
+			{
+				questions.push(i);
+			}
+			
+			{% if quizParams.shuffle %}
+				// If shuffle is enabled, shuffle the question order
+				questions = shuffle(questions);
+			{% endif %}
+
+			// If alertRecoverQuiz is enabled, alert the user of an already started quiz and
+			// ask if he would like to continue it
+			if(alertRecoverQuiz)
+			{
+				if (confirm('You already started a Quiz, do you want to continue it?')) {
+					// Continue the quiz
+					window.location.href = "{{ path('recover_quiz', {'course_id':course.id}) }}";
+				}else{
+					// Not continuing the quiz, delete it
+					console.log("DELETING LAST QUIZ...");
+					$.post( saveQuizUrl, { questions: "QUIZ_ENDED" }).done(function( data ) {
+						console.log("Response DELETE_LAST_QUIZ: "+data);
+		            });
+				}
+			}
+        });
+
+        /**
+        When page and images are loaded, show the first question and hide the loading components
+        */
+        $( window ).on( "load", function() {
+        	$("#QUESTION_"+questions[0]).show();
+        	$("#loadingLabel").hide();		
+        	$("#loadingImage").hide();		
+        	$("#answerDiv").removeClass("hidden");
+			$("#progressbar").removeClass("progress-bar-warning");
+			$("#progressbar").addClass("progress-bar-success");
+
+        	// Update the quiz status
+        	updateStatus();
+        });
+
+		/**
+		When "show answer" is clicked, show the correct answer
+		*/
+        $("#showAnswerBtn").click(function () {
+			showAnswer();
+        });
+
+		/**
+		When "correctBtn" is clicked, mark the answer as correct
+		*/
+        $("#correctBtn").click(function () {
+			correctAnswer();
+        });
+
+        /**
+		When "wrongBtn" is clicked, mark the answer as wrong
+		*/
+        $("#wrongBtn").click(function () {
+			wrongAnswer();
+        });
+
+		/**
+		Key bindings for keyboard shortcuts
+		*/
+        $('body').keyup(function(e){
+			// Uncomment below if you want to see the keycode
+			// console.log(e.keyCode);
+			
+			// Space Key - Show Answer
+            if(e.keyCode == 32){
+				showAnswer();
+            }
+          	// C Key - Correct Answer
+            if(e.keyCode == 67){
+				correctAnswer();
+            }
+          	// W Key - Wrong Answer
+            if(e.keyCode == 87){
+				wrongAnswer();
+            }
+          	// U Key - UNDO Answer
+            if(e.keyCode == 85){
+				undoQuiz();
+            }
+        });
+
+		/**
+		Show the correct answer
+		*/
+        function showAnswer()
+        {
+        	$("#ANSWER_"+questions[0]).fadeIn(400);
+        	$("#showAnswerBtn").hide();
+        	$(".quizAnswerBtnDiv").fadeIn(400);
+        }
+
+		/**
+		Mark the answer as correct
+		*/
+        function correctAnswer()
+        {
+            // Hide the current question
+        	hideCurrent();
+
+			// Save the quiz state
+        	saveState();
+
+			// Register the given answer via AJAX as CORRECT ( true )
+        	registerAnswer(questions[0], true);
+        	
+            // Deletes the current question
+			questions.splice(0,1);
+
+			// Show the next question
+			showCurrent();
+
+			// Check if the quiz is ended, if not, increase the counts and update the quiz status
+			if (!isQuizEnded) 
+			{
+				correctCount++;
+				totalCount++;
+				updateStatus();
+			}
+
+			// Save the quiz via AJAX
+			saveQuiz();
+        }
+
+		/**
+		Mark the answer as wrong
+		*/
+        function wrongAnswer()
+        {
+            // Hide the current question
+            hideCurrent();
+
+			// Save the quiz state
+            saveState();
+
+            // Register the given answer via AJAX as WRONG ( false )
+            registerAnswer(questions[0], false);
+            
+            // Add the current question to the end, and then delete it from the beginning
+            // In this way, the wrong question is asked again after all the questions are being answered
+			questions.push(questions[0]);
+			questions.splice(0,1);
+
+			// Show the next question
+			showCurrent();
+
+			// Check if the quiz is ended, if not, increase the counts and update the quiz status
+			if (!isQuizEnded) 
+			{
+    			wrongCount++;
+    			totalCount++;
+    			realTotal++;
+    			updateStatus();
+			}
+
+			// Save the quiz via AJAX
+			saveQuiz();
+        }
+
+		/**
+		Hide the current question ( hide the DIVs )
+		*/
+        function hideCurrent()
+        {
+        	$("#ANSWER_"+questions[0]).hide();
+        	$("#QUESTION_"+questions[0]).hide();
+        }
+
+		/**
+		Show the current question
+		*/
+        function showCurrent()
+        {
+            // If there are no more questions, the quiz is ended
+            if (questions.length==0)
+            {
+				quizEnded();
+            }
+
+            // Show the divs and hide the answer buttons
+        	$("#QUESTION_"+questions[0]).show();
+        	$("#showAnswerBtn").show();
+        	$(".quizAnswerBtnDiv").hide();
+        }
+
+		/**
+		Mark the quiz as ended and shows the summary box
+		*/
+        function quizEnded()
+        {
+            isQuizEnded = true;
+        	$(".quizDiv").hide();
+        	$("#progressBarDiv").hide();
+        	$('#summaryBox').removeClass('hidden');
+        }
+
+		/**
+		Update the status labels with the current quiz situation
+		*/
+		function updateStatus()
+		{
+			
+			$("#statusLabelQuestion").text(totalCount+"/"+realTotal);
+			$("#statusLabelCorrect").text(correctCount);
+			$("#statusLabelWrong").text(wrongCount);
+			
+			var percentage = Math.round((totalCount/realTotal)*100);
+            $("#progressbar").css("width",percentage+"%");
+            $("#progressbar").text(percentage+"% Complete");
+		}
+
+		/**
+		Register a given answer to the server via AJAX
+		*/
+		function registerAnswer(questionNumber, isCorrect)
+		{
+			// Convert the boolean value into 1 and 0
+			if(isCorrect)
+			{
+				isCorrect = "1";
+			}else{
+				isCorrect = "0";
+			}
+
+			// Logs
+			console.log("Registering "+isCorrect+" for question: "+questionNumber);
+
+			// AJAX request url
+			var registerAnswerUrl = "{{ url('homepage') }}course/"+course+"/register_answer/"+(questionNumber+1)+"/"+isCorrect;
+
+			// Send AJAX request and then prints the answer
+			$.get( registerAnswerUrl, function( data ) {
+				console.log("Response REG_ANSWER: "+data);
+            });
+			
+		}
+
+		/**
+		Register the remaining questions to server via AJAX
+		Used to continue the quiz later
+		*/
+		function saveQuiz()
+		{
+			// Logs
+			console.log("Saving the quiz...");
+
+			// Output variable
+			var questionsOut = [];
+
+			// Check if the quiz is ended
+			if (questions.length>0)
+			{
+				// Increment all the question numbers (because they start from 1)
+				for(var i = 0; i<questions.length; i++)
+				{
+					questionsOut.push(questions[i]+1);
+				}
+			}else{
+				// QUIZ_ENDED will delete the SavedQuiz instance from the server
+				questionsOut.push("QUIZ_ENDED");
+			}
+
+			// Join all the question numbers in a string separated by ;
+			var questionString = questionsOut.join(";");
+
+			// Send the questions to the server via POST and then print the response
+			$.post( saveQuizUrl, { questions: questionString }).done(function( data ) {
+				console.log("Response SAVE_QUIZ: "+data);
+            });
+		}
+
+		/**
+		Save the quiz state
+		*/
+		function saveState()
+		{
+			// Pushes all the variables into the history array
+			var currentState = [questions.slice(), totalCount, realTotal, correctCount, wrongCount];
+			questionHistory.push(currentState);
+		}
+
+		/**
+		Undo the last answer
+		*/
+		function undoQuiz()
+		{
+			// Check if quiz is not finished
+			if (questionHistory.length>0)
+			{
+				// Loads the last state from the questionHistory
+				hideCurrent();
+				var lastState = questionHistory[questionHistory.length-1];
+				questions = lastState[0];
+				totalCount = lastState[1];
+				realTotal = lastState[2];
+				correctCount = lastState[3];
+				wrongCount = lastState[4];
+				questionHistory.splice(questionHistory.length-1,1);
+				updateStatus();
+				showCurrent();
+			}
+		}
+
+		/**
+		Random shuffle an array
+		*/
+        function shuffle(array) {
+            var currentIndex = array.length, temporaryValue, randomIndex;
+            
+            // While there remain elements to shuffle...
+            while (0 !== currentIndex) {
+                
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+                
+                // And swap it with the current element.
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+            
+            return array;
+        }
+    </script>
+{% endblock %}
