@@ -3,9 +3,9 @@
 	<table class="table table-striped">
     	<thead>
           <tr>
-            <th>Course</th>
-            <th>Question</th>
-            <th>Mistakes</th>
+            <th>{% trans %}Course{% endtrans %}</th>
+            <th>{% trans %}Question{% endtrans %}</th>
+            <th>{% trans %}Mistakes{% endtrans %}</th>
           </tr>
         </thead>
         <tbody>
@@ -24,5 +24,5 @@
 	{% endfor %}
 	#}
 {% else %}
-	<p>You don't have any answer saved...</p>
+	<p>{% trans %}You don't have any answer saved{% endtrans %}...</p>
 {% endif %}

@@ -6,21 +6,21 @@
     		<span class="list-group-item clearfix">
     			<span class="pull-left text-left">
         			<h4><a href="{{ path('course', {'course_id' : course.id}) }}" >{{ course.name }}</a>
-        			<div class="hidden-xs"><small>{{ course.description }} - Author: {{ course.author.displayName }}</small></div></h4>
+        			<div class="hidden-xs"><small>{{ course.description }} - {% trans %}Author{% endtrans %}: {{ course.author.displayName }}</small></div></h4>
     				
     			</span>
     			<span class="pull-right">
     				<a href="{{ path("course", {'course_id' : course.id}) }}" class="btn btn-warning">
-    					<span class="glyphicon glyphicon-search"></span><div class="hidden-xs">Course Panel</div>
+    					<span class="glyphicon glyphicon-search"></span><div class="hidden-xs">{% trans %}Course Panel{% endtrans %}</div>
     				</a>
     				<a href="{{ path("quiz", {'course_id' : course.id}) }}" class="btn btn-success">
-    					<span class="glyphicon glyphicon-play"></span><div class="hidden-xs">Start a Test</div>
+    					<span class="glyphicon glyphicon-play"></span><div class="hidden-xs">{% trans %}Start a Test{% endtrans %}</div>
     				</a>
     				<a href="{{ path('list_questions', {'course_id': course.id }) }}" class="btn btn-info">
-    					<span class="glyphicon glyphicon-th-list"></span><div class="hidden-xs">Question List</div>
+    					<span class="glyphicon glyphicon-th-list"></span><div class="hidden-xs">{% trans %}Question List{% endtrans %}</div>
     				</a>
     				<a href="{{ path('stats', {'course_id': course.id}) }}" class="btn btn-primary">
-    					<span class="glyphicon glyphicon-signal"></span><div class="hidden-xs">View Stats</div>
+    					<span class="glyphicon glyphicon-signal"></span><div class="hidden-xs">{% trans %}View Stats{% endtrans %}</div>
     				</a>
     				
     				{# If the user is ADMIN, enable editing a course #}
@@ -34,5 +34,5 @@
     	{% endfor %}
     </table>
 {% else %}
-	<p>There are no courses at the moment...</p>
+	<p>{% trans %}There are no courses at the moment{% endtrans %}...</p>
 {% endif %}

@@ -4,7 +4,7 @@
 
 {% set active_page="courses" %}
 
-{% block pageName %}{{ course.name }} - Course{% endblock %}
+{% block pageName %}{{ course.name }} - {% trans %}Course{% endtrans %}{% endblock %}
 
 {% block contentTitle %}{{ course.name }}{% endblock %}
 
@@ -18,7 +18,7 @@
             		<p>{{ course.longDescription }}</p>
             		
     			</div>
-    			<div class="panel-footer"><b>Author: </b>{{ course.author.displayName }}</div>
+    			<div class="panel-footer"><b>{% trans %}Author{% endtrans %}: </b>{{ course.author.displayName }}</div>
     		</div>
     	</div>
 	</div>
@@ -26,10 +26,10 @@
 		<div class="col-sm-6">
 			{# Provide a link to view all the questions #}
 			<div class="panel panel-info">
-				<div class="panel-heading">Study</div>
+				<div class="panel-heading">{% trans %}Study{% endtrans %}</div>
     			<div class="panel-body">
-        			<p>This section provides a set of tools to learn and study the subject, before starting the testing phase.</p>
-					<p><a href="{{ path("list_questions", {'course_id' : course.id}) }}" class="btn btn-primary"><span class="glyphicon glyphicon-th-list"></span> View all Questions and Answers</a></p>
+        			<p>{% trans %}This section provides a set of tools to learn and study the subject, before starting the testing phase{% endtrans %}.</p>
+					<p><a href="{{ path("list_questions", {'course_id' : course.id}) }}" class="btn btn-primary"><span class="glyphicon glyphicon-th-list"></span> {% trans %}View all Questions and Answers{% endtrans %}</a></p>
     			</div>
     		</div>
 		</div>
@@ -38,16 +38,16 @@
 			<div class="panel panel-success">
 				<div class="panel-heading">Test</div>
     			<div class="panel-body">
-        			<p>This section provides a set of tools to test and reinforce your comprehension by using repetition.</p>
+        			<p>{% trans %}This section provides a set of tools to test and reinforce your comprehension by using repetition{% endtrans %}.</p>
     			    {# Check if a user has already started a quiz, if so, provide a link to continue it #}
 			        {% if already_started %}
-    					<p><a href="{{ path("recover_quiz", {'course_id' : course.id}) }}" class="btn btn-warning"><span class="glyphicon glyphicon-repeat"></span> Continue the Quiz</a></p>
+    					<p><a href="{{ path("recover_quiz", {'course_id' : course.id}) }}" class="btn btn-warning"><span class="glyphicon glyphicon-repeat"></span> {% trans %}Continue the Quiz{% endtrans %}</a></p>
     				{% endif %}
     				
-    				<p><a href="{{ path("quiz", {'course_id' : course.id}) }}" class="btn btn-success"><span class="glyphicon glyphicon-play-circle"></span> Start a Quiz ( All Questions )</a></p>
+    				<p><a href="{{ path("quiz", {'course_id' : course.id}) }}" class="btn btn-success"><span class="glyphicon glyphicon-play-circle"></span> {% trans %}Start a Quiz ( All Questions ){% endtrans %}</a></p>
         			
                     {% if app.user %}
-                    	<a href="{{ path('mistaken_quiz', { 'course_id' : course.id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-fire"></span> Quiz Most Mistaken!</a>
+                    	<a href="{{ path('mistaken_quiz', { 'course_id' : course.id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-fire"></span> {% trans %}Quiz Most Mistaken{% endtrans %}!</a>
                     {% endif %}
         		</div>
         	</div>

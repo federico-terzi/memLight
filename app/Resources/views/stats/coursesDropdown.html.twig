@@ -1,6 +1,6 @@
 {# Render a dropdown with all courses #}
 <select class="form-control" id="course">
-    <option value="all">All Courses</option>
+    <option value="all">{% trans %}All Courses{% endtrans %}</option>
     {% for course in courses %}
     	<option value="{{ course.id }}"
         	{% if course.id == course_id %}

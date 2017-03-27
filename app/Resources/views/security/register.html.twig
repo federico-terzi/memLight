@@ -4,9 +4,9 @@
 
 {% extends 'layout.html.twig' %}
 
-{% block pageName %}Registration{% endblock %}
+{% block pageName %}{% trans %}Registration{% endtrans %}{% endblock %}
 
-{% block contentTitle %}Registration{% endblock %}
+{% block contentTitle %}{% trans %}Registration{% endtrans %}{% endblock %}
 
 {% block content %}
 	<div class="loginContentDiv">
@@ -17,7 +17,7 @@
             {{ form_row(form.plainPassword.first) }}
             {{ form_row(form.plainPassword.second) }}
         
-            <button type="submit" class="btn btn-success btn-lg">Register!</button>
+            <button type="submit" class="btn btn-success btn-lg">{% trans %}Register{% endtrans %}!</button>
         {{ form_end(form) }}
 	</div>
 
