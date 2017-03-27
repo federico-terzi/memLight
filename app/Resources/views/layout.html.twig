@@ -31,17 +31,30 @@ memLight - A Simple, Light-wight and Effective Way to Learn -
 		</div>
 		<div class="collapse navbar-collapse" id="myNavbar">
 			<ul class="nav navbar-nav">
-				{# Add pages to the navbar and, using the active_page variable, highlight the active page #}
-				<li {% if active_page=="home" %}class="active" {% endif %}><a href="{{ path('homepage') }}">
-					<span class="glyphicon glyphicon-home"></span> {% trans %}Home{% endtrans %}</a></li>
-				<li {% if active_page=="courses" %}class="active" {% endif %}><a href="{{ path('courses') }}">
-					<span class="glyphicon glyphicon-th-list"></span> {% trans %}Courses{% endtrans %}</a></li>
-				<li {% if active_page=="stats" %}class="active" {% endif %}><a href="{{ path('stats') }}">
-					<span class="glyphicon glyphicon-signal"></span> {% trans %}Stats{% endtrans %}</a></li>
-				<li {% if active_page=="settings" %}class="active" {% endif %}><a href="{{ path('settings') }}">
-					<span class="glyphicon glyphicon-cog"></span> {% trans %}Settings{% endtrans %}</a></li>
-				<li {% if active_page=="about" %}class="active" {% endif %}><a href="{{ path('about') }}">
-					<span class="glyphicon glyphicon-eye-open"></span> {% trans %}About{% endtrans %}</a></li>
+				{# Add pages to the navbar and, using the active_page variable,
+				highlight the active page #}
+				<li {% if active_page=="home" %} class="active" {% endif %}><a
+					href="{{ path('homepage') }}"> <span
+						class="glyphicon glyphicon-home"></span> {% trans %}Home{% endtrans %}</a></li>
+				<li {% if active_page=="courses" %} class="active" {% endif %}><a
+					href="{{ path('courses') }}"> <span
+						class="glyphicon glyphicon-th-list"></span> {% trans %}Courses{% endtrans %}</a></li>
+				<li {% if active_page=="stats" %} class="active" {% endif %}><a
+					href="{{ path('stats') }}"> <span
+						class="glyphicon glyphicon-signal"></span> {% trans %}Stats{% endtrans %}</a></li>
+				<li {% if active_page=="settings" %} class="active" {% endif %}><a
+					href="{{ path('settings') }}"> <span
+						class="glyphicon glyphicon-cog"></span> {% trans %}Settings{% endtrans %}</a></li>
+				<li {% if active_page=="about" %} class="active" {% endif %}><a
+					href="{{ path('about') }}"> <span
+						class="glyphicon glyphicon-eye-open"></span> {% trans %}About{% endtrans %}</a></li>
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-globe"></span> {% trans %}Language{% endtrans %}<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="#"><img src="" class="flag flag-gb" /> English</a></li>
+						<li><a href="#"><img src="" class="flag flag-it" /> Italiano</a></li>
+					</ul>
+				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				{# If the user is logged in, show the username and the logout button #}

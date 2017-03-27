@@ -8,6 +8,7 @@ Logged as: Ciao
 Login: Login
 Logout: Logout
 Register: Registrati
+Language: Lingua
 
 #Homepage
 Welcome to memLight: Benvenuto su memLight
@@ -62,5 +63,41 @@ Actions: Azioni
 Delete Progress Data: Cancella i Progressi
 Done: Fatto
 Progress successfully deleted!: Progressi eliminati con successo!
+
+#Question List
+There are no questions in this course: Non ci sono domande in questo corso
+Questions and Answers List: Lista Domande e Risposte
+
+#Quiz
+Loading: Caricamento
+Question: Domanda
+Answer: Risposta
+Click here to Show the Answer: Clicca qui per Mostrare la Risposta
+Status: Stato
+Correct: Corrette
+Wrong: Sbagliate
+Keyboard Shortcuts: Scorciatoie da Tastiera
+Show the Answer: Mostra la Risposta
+Correct Answer: Risposta Corretta
+Wrong Answer: Risposta Sbagliata
+Undo Answer: Annulla Risposta
+Space Bar: Barra Spaziatrice
+Quiz Finished: Quiz Finito
+Summary: Resoconto
+There are no questions: Non ci sono domande
+You already started a Quiz, do you want to continue it: Hai già iniziato un Quiz, vuoi continuarlo?
+
+#Login and Registration
+Don't have an account: Non hai un Account
+Full Name ( Optional ): Nome Completo ( Facoltativo )
+Repeat Password: Ripeti la Password
+Registration: Registrazione
+Username: Username
+Password: Password
+
+#About
+memLight is a great way to study subjects where you need to memorize big chunks of information: memLight è un ottimo modo per studare le materie dove è richiesto imparare una grande quantità di informazioni
+About memLight: Cos'è memLight
+Credits: Crediti
 
 

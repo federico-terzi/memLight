@@ -30,7 +30,7 @@
         {# This block is used when a page needs to include some custom css #}
         {% block stylesheets %}{% endblock %}
         
-        <!-- Logo Style -->
+        <!-- Logo Style and Flags -->
         <style>
         .logo-icon {
         	height: 40px;
@@ -43,6 +43,13 @@
         	opacity: 1;
             filter: alpha(opacity=100); /* For IE8 and earlier */
         }
+        
+        /* Flags */
+
+        .flag{display:inline-block;width:16px;height:11px;background:url('{{asset('images/flags.png')}}') no-repeat}
+        .flag.flag-it{background-position:-16px 0}
+        .flag.flag-gb{background-position:0 0}
+                
         </style>
         
         <!-- Emoji provided free by EmojiOne -->

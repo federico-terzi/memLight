@@ -4,12 +4,12 @@
 
 {% set active_page="courses" %}
 
-{% block pageName %}{{ course.name }} - Question List{% endblock %}
+{% block pageName %}{{ course.name }} - {% trans %}Question List{% endtrans %}{% endblock %}
 
 {% block contentTitle %}{{ course.name }}{% endblock %}
 
 {% block content %}
-	<h3>Questions and Answers List</h3>
+	<h3>{% trans %}Questions and Answers List{% endtrans %}</h3>
 	
 	{# Render the question list #}
 	{{ render(controller('AppBundle:Courses:questionList', {'course': course })) }}

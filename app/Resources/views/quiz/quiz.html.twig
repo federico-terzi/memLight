@@ -10,16 +10,16 @@
 	{% if questions %}
 			<div class="progress" id="progressBarDiv">
               <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" style="width:100%" id="progressbar">
-                <span id="progressbar-label">Loading...</span>
+                <span id="progressbar-label">{% trans %}Loading{% endtrans %}...</span>
               </div>
             </div>
     		<div class="panel-group text-center">
         		<div class="panel panel-primary quizDiv">
-    				<div class="panel-heading">Question</div>
+    				<div class="panel-heading">{% trans %}Question{% endtrans %}</div>
         			<div class="panel-body">
         				<!-- Loading bar visible when images are loading -->
         				<img src="{{ asset('images/loadingBar.gif') }}" id="loadingImage"/>
-            			<p class="quizQuestionLabel" id="loadingLabel">Loading...</p>
+            			<p class="quizQuestionLabel" id="loadingLabel">{% trans %}Loading{% endtrans %}...</p>
             			
             			<!-- Question DIVs -->
             			{# Create a separate div for each question 
@@ -46,9 +46,9 @@
         			</div>
         		</div>
         		<div class="panel panel-primary quizDiv hidden" id="answerDiv">
-    				<div class="panel-heading">Answer</div>
+    				<div class="panel-heading">{% trans %}Answer{% endtrans %}</div>
         			<div class="panel-body">
-            			<a href="#" id="showAnswerBtn" class="btn btn-lg btn-success">Click here to Show the Answer</a>
+            			<a href="#" id="showAnswerBtn" class="btn btn-lg btn-success">{% trans %}Click here to Show the Answer{% endtrans %}</a>
             			
             			<!-- Answer DIVs -->
             			{# Create a separate div for each answer 
@@ -86,19 +86,19 @@
     			
     				<!-- Status div, contains the label that will show quiz progress -->
     				<div class="panel panel-success quizDiv">
-        				<div class="panel-heading">Status</div>
+        				<div class="panel-heading">{% trans %}Status{% endtrans %}</div>
             			<div class="panel-body">
             				<table class="table table-condensed text-left noMarginBottom">
             					<tr>
-            						<td>Question</td>
+            						<td>{% trans %}Question{% endtrans %}</td>
             						<td><span id="statusLabelQuestion"></span></td>
             					</tr>
             					<tr>
-            						<td>Correct</td>
+            						<td>{% trans %}Correct{% endtrans %}</td>
             						<td><span id="statusLabelCorrect"></span></td>
             					</tr>
             					<tr>
-            						<td>Wrong</td>
+            						<td>{% trans %}Wrong{% endtrans %}</td>
             						<td><span id="statusLabelWrong"></span></td>
             					</tr>
             				</table>
@@ -109,13 +109,13 @@
     				
     				<!-- Keyboard shortcuts div, invisible on mobile -->
     				<div class="panel panel-warning quizDiv hidden-xs text-left">
-        				<div class="panel-heading">Keyboard Shortcuts</div>
+        				<div class="panel-heading">{% trans %}Keyboard Shortcuts{% endtrans %}</div>
             			<div class="panel-body">
             				<ul>
-            					<li>Show the Answer -> <kbd>[ Space Bar ]</kbd> </li>
-            					<li>Correct Answer -> <kbd>[ C ]</kbd> </li>
-            					<li>Wrong Answer -> <kbd>[ W ]</kbd> </li>
-            					<li>Undo Answer -> <kbd>[ U ]</kbd> </li>
+            					<li>{% trans %}Show the Answer{% endtrans %} -> <kbd>[ {% trans %}Space Bar{% endtrans %} ]</kbd> </li>
+            					<li>{% trans %}Correct Answer{% endtrans %} -> <kbd>[ C ]</kbd> </li>
+            					<li>{% trans %}Wrong Answer{% endtrans %} -> <kbd>[ W ]</kbd> </li>
+            					<li>{% trans %}Undo Answer{% endtrans %} -> <kbd>[ U ]</kbd> </li>
             				</ul>
             			</div>
             		</div>
@@ -124,14 +124,14 @@
     		
     		<!-- Summary DIV, visible only at the end of the quiz -->
     		<div class="panel panel-primary hidden" id="summaryBox">
-				<div class="panel-heading">Quiz Finished - Summary</div>
+				<div class="panel-heading">{% trans %}Quiz Finished{% endtrans %} - {% trans %}Summary{% endtrans %}</div>
     			<div class="panel-body">
     				<a href="{{ path('quiz', {'course_id': course.id}) }}" class="btn btn-success"><span class="glyphicon glyphicon-repeat"></span> Repeat the Quiz</a>
     			</div>
     		</div>
     {% else %}
     	{# If there are no questions #}
-    	<p>There are no questions...</p>
+    	<p>{% trans %}There are no questions{% endtrans %}...</p>
     {% endif %}
 {% endblock %}
 
@@ -190,7 +190,7 @@
 			// ask if he would like to continue it
 			if(alertRecoverQuiz)
 			{
-				if (confirm('You already started a Quiz, do you want to continue it?')) {
+				if (confirm('{% trans %}You already started a Quiz, do you want to continue it{% endtrans %}?')) {
 					// Continue the quiz
 					window.location.href = "{{ path('recover_quiz', {'course_id':course.id}) }}";
 				}else{
