@@ -1,0 +1,19 @@
+{% extends 'layout.html.twig' %}
+
+{# Change Language: render an alert message before changing the language #}
+
+{% set active_page="settings" %}
+
+{% block pageName %}{% trans %}Changing language{% endtrans %}{% endblock %}
+
+{% block contentTitle %}{% trans %}Changing language{% endtrans %}...{% endblock %}
+
+{% block content %}
+    <div class="alert alert-info">
+    	<strong>{% trans %}Changing language{% endtrans %}</strong> {% trans %}You will be redirected in a few seconds{% endtrans %}...
+    </div>
+{% endblock %}
+
+{% block headContents %}
+<meta http-equiv="refresh" content="0;url={{ path('homepage') }}" />
+{% endblock %}

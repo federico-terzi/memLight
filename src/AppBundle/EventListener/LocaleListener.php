@@ -24,23 +24,28 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LocaleListener implements EventSubscriberInterface
 {
 	private $defaultLocale;
+	private $logger;
 
-	public function __construct($defaultLocale = 'en')
+	public function __construct($defaultLocale = 'en', $logger)
 	{
 		$this->defaultLocale = $defaultLocale;
+		$this->logger = $logger;
 	}
 
 	public function onKernelRequest(GetResponseEvent $event)
 	{
 		$request = $event->getRequest();
 		if (!$request->hasPreviousSession()) {
-			return;
+			$this->logger->info("HAS PREVIOUS SESSION == FALSE");
+			#return;
 		}
 
 		// try to see if the locale has been set as a _locale routing parameter
 		if ($locale = $request->attributes->get('_locale')) {
+			$this->logger->info("SET LOCALE ".$locale);
 			$request->getSession()->set('_locale', $locale);
 		} else {
+			$this->logger->info("GET LOCALE ".$request->getSession()->get('_locale', $this->defaultLocale));
 			// if no explicit locale has been set on this request, use one from the session
 			$request->setLocale($request->getSession()->get('_locale', $this->defaultLocale));
 		}
