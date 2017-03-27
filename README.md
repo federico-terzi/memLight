@@ -17,6 +17,7 @@ It provides tools to study your subjects, quiz your comprehension and view your 
 * **Quiz Most Mistaken:** Strenghten your weak spots by focusing your training on your most mistaken questions
 * **Edit Capabilities:** You can add, edit and delete questions and courses, so you can customize your learning experience
 * **Versioning Control:** You can edit your questions and always keep them up to date.
+* **Multi Language:** memLight supports multiple languages, currently English and Italian
 
 # Credits
 
