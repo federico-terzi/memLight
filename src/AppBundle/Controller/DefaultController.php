@@ -52,6 +52,6 @@ class DefaultController extends Controller
      */
     public function langAction()
     {
-    	return $this->render("settings/changeLanguage.html.twig");
+    	return $this->redirectToRoute("homepage");
     }
 }

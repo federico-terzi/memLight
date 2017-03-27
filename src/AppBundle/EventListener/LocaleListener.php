@@ -35,17 +35,25 @@ class LocaleListener implements EventSubscriberInterface
 	public function onKernelRequest(GetResponseEvent $event)
 	{
 		$request = $event->getRequest();
+		
+		/* Commented below because I've set "require_previous_session: false"
+		 * in the security.yml and this condition created problems when changing language
+		 * 
 		if (!$request->hasPreviousSession()) {
-			$this->logger->info("HAS PREVIOUS SESSION == FALSE");
-			#return;
+			//$this->logger->info("HAS PREVIOUS SESSION == FALSE");
+			
+			//return;
 		}
+		*/
 
 		// try to see if the locale has been set as a _locale routing parameter
 		if ($locale = $request->attributes->get('_locale')) {
-			$this->logger->info("SET LOCALE ".$locale);
+			//$this->logger->info("SET LOCALE ".$locale);
+			
 			$request->getSession()->set('_locale', $locale);
 		} else {
-			$this->logger->info("GET LOCALE ".$request->getSession()->get('_locale', $this->defaultLocale));
+			//$this->logger->info("GET LOCALE ".$request->getSession()->get('_locale', $this->defaultLocale));
+			
 			// if no explicit locale has been set on this request, use one from the session
 			$request->setLocale($request->getSession()->get('_locale', $this->defaultLocale));
 		}
