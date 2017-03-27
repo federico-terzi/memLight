@@ -1,11 +1,26 @@
 <?php
-// src/AppBundle/EventListener/LocaleListener.php
+
+/*
+ * This file is part of the memLight project,
+ * check it out on GitHub: https://github.com/federico-terzi/memLight
+ *
+ * Copyright (C) Federico Terzi 2017
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace AppBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * This class saves the choosen locale in the session so the user can choose a
+ * language.
+ * This class is taken from Symfony official documentation
+ */
 class LocaleListener implements EventSubscriberInterface
 {
 	private $defaultLocale;

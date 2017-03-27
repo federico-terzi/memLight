@@ -48,11 +48,12 @@ memLight - A Simple, Light-wight and Effective Way to Learn -
 				<li {% if active_page=="about" %} class="active" {% endif %}><a
 					href="{{ path('about') }}"> <span
 						class="glyphicon glyphicon-eye-open"></span> {% trans %}About{% endtrans %}</a></li>
+				{# Dropdown to change Language #}
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-globe"></span> {% trans %}Language{% endtrans %}<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="#"><img src="" class="flag flag-gb" /> English</a></li>
-						<li><a href="#"><img src="" class="flag flag-it" /> Italiano</a></li>
+						<li><a href="{{ path('lang', {'_locale':'en'}) }}"><img src="{{ asset('images/blank.png') }}" class="flag flag-gb" /> English</a></li>
+						<li><a href="{{ path('lang', {'_locale':'it'}) }}"><img src="{{ asset('images/blank.png') }}" class="flag flag-it" /> Italiano</a></li>
 					</ul>
 				</li>
 			</ul>
