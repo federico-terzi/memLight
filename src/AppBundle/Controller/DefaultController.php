@@ -47,12 +47,11 @@ class DefaultController extends Controller
     
     /**
      * Change User Language ( change the locale )
-     * and then redirect to the Homepage
      *
      * @Route("/lang/{_locale}", name="lang")
      */
     public function langAction()
     {
-    	return $this->redirectToRoute('homepage');
+    	return $this->redirectToRoute("homepage");
     }
 }

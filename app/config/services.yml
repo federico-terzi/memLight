@@ -12,6 +12,6 @@ services:
         arguments: ["@doctrine"]
     app.locale_listener:
         class: AppBundle\EventListener\LocaleListener
-        arguments: ['%kernel.default_locale%']
+        arguments: ['%kernel.default_locale%', "@logger"]
         tags:
             - { name: kernel.event_subscriber }

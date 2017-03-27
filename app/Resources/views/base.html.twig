@@ -27,6 +27,9 @@
         <!-- Custom css -->
         <link rel="stylesheet" href="{{ asset('style.css') }}">
         
+        {# This block is used when a page needs to make a redirect #}
+        {% block headContents %}{% endblock %}
+        
         {# This block is used when a page needs to include some custom css #}
         {% block stylesheets %}{% endblock %}
         
