@@ -39,19 +39,29 @@ class CourseServices {
 	 * @param Course $course
 	 * @return Question[]|null
 	 */
-	public function getAllQuestionForCourse($course)
+	public function getAllQuestionForCourse($course, $includeVersions = false)
 	{
 		// Get doctrine manager
 		$manager = $this->doctrine->getManager();
 		
-		// Find the most recent version of the questions for the specified course
-		$query = $manager->createQuery('SELECT q
+		if ($includeVersions==false)
+		{
+			// Find the most recent version of the questions for the specified course
+			$query = $manager->createQuery('SELECT q
 								    FROM AppBundle:Question q
 								    WHERE q.course = :course
 									AND q.version >= (SELECT MAX(q2.version) FROM AppBundle:Question q2
 													  WHERE q2.course = q.course AND q2.questionNumber = q.questionNumber)
 								    ORDER BY q.questionNumber ASC'
-				)->setParameter('course', $course);
+					)->setParameter('course', $course);
+		}else{
+			// Find all the versions of the questions for the specified course
+			$query = $manager->createQuery('SELECT q
+								    FROM AppBundle:Question q
+								    WHERE q.course = :course
+								    ORDER BY q.questionNumber ASC'
+					)->setParameter('course', $course);
+		}
 		
 		// Get the results
 		$questions = $query->getResult();
