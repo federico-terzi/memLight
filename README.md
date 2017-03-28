@@ -18,6 +18,7 @@ It provides tools to study your subjects, quiz your comprehension and view your 
 * **Edit Capabilities:** You can add, edit and delete questions and courses, so you can customize your learning experience
 * **Versioning Control:** You can edit your questions and always keep them up to date.
 * **Multi Language:** memLight supports multiple languages, currently English and Italian
+* **Export Course:** you can export a course to keep it safe
 
 # Credits
 
