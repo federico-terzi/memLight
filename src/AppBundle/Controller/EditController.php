@@ -22,6 +22,8 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Controller used to Add/Edit Courses and Questions
@@ -619,8 +621,10 @@ class EditController extends Controller
 		// Write the json to file
 		$fs->dumpFile($filename, $json);
 		
+		// Array that will store file paths, initialized with course and questions data
 		$files = array($filename);
 		
+		// Loop through each question, adding images
 		foreach ($questions as $q) {
 			if (!is_null($q->getQuestionUrl()))
 			{
@@ -632,16 +636,42 @@ class EditController extends Controller
 			}
 		}
 		
+		// Output zip filename
+		$zipFileName = 'Course-'.$course_id."-".$course->getName().".zip";
+		
+		// Zip filename with path
+		$zipCompleteFilePath = $this->getParameter('export_directory').$zipFileName;
+		
+		// Create a Zip Archive
 		$zip = new \ZipArchive();
-		$zipName = $this->getParameter('export_directory').'Course-'.$course_id."-".time().".zip";
-		$zip->open($zipName,  \ZipArchive::CREATE);
+		
+		// Initialize the zip archive
+		$zip->open($zipCompleteFilePath,  \ZipArchive::CREATE);
+		
+		// Add each file
 		foreach ($files as $f) {
 			$zip->addFromString(basename($f),  file_get_contents($f));
 		}
 		
+		// Close the zip
 		$zip->close();
 		
-		// Render the page
-		return new Response($json);
+		// Clear the cache of the zipFile
+		clearstatcache(false, $zipCompleteFilePath);
+		
+		// Prepare the Response with zipFile contents
+		$response = new Response(file_get_contents($zipCompleteFilePath));
+		
+		// Set custom headers needed to force the zip download
+		$disposition = $response->headers->makeDisposition(
+				ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+				$zipFileName
+				);
+		
+		$response->headers->set('Content-Disposition', $disposition);
+		$response->headers->set('Content-Type', 'application/zip');
+		
+		// Returns the zip file
+		return $response;
 	}
 }

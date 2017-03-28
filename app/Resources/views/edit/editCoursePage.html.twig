@@ -19,9 +19,13 @@
 			<a href="{{ path('edit_course_info', {'course_id': course.id }) }}" class="btn btn-warning">
     			<span class="glyphicon glyphicon-pencil"></span> Edit Course Info
     		</a>
+    		<a href="{{ path('export_course', {'course_id': course.id }) }}" class="btn btn-info">
+    			<span class="glyphicon glyphicon-download-alt"></span> Export Course
+    		</a>
     		<a href="{{ path('warning_delete_course', {'course_id': course.id }) }}" class="btn btn-danger">
     			<span class="glyphicon glyphicon-remove"></span> Delete Course
     		</a>
+    		
     	</div>
 	</div>
 	{# Render a question list #}
