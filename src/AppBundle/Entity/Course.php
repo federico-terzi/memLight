@@ -13,6 +13,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * This entity rapresents a Course and stores all the relevant information about it
@@ -22,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Federico Terzi
  *
  */
-class Course
+class Course implements JsonSerializable
 {
 	/**
 	 * @ORM\Column(type="integer")
@@ -274,5 +275,18 @@ class Course
     public function getSavedQuizzes()
     {
         return $this->savedQuizzes;
-    }
+    }
+	/**
+	 * {@inheritDoc}
+	 * @see JsonSerializable::jsonSerialize()
+	 */
+	public function jsonSerialize() {
+		return array(
+				'name' => $this->name,
+				'description'=> $this->description,
+				'longDescription'=> $this->longDescription,
+				'author'=> $this->author->getUsername(),
+		);
+	}
+
 }

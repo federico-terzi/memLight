@@ -8,6 +8,7 @@ imports:
 parameters:
     locale: en
     courses_directory: '%kernel.root_dir%/../web/courses/'
+    export_directory: '%kernel.root_dir%/../web/export/'
     app.version: 0.1.2
     app.locales: en|it
 

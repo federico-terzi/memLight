@@ -21,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Controller used to Add/Edit Courses and Questions
@@ -575,5 +576,72 @@ class EditController extends Controller
 		
 		// Render the page
 		return $this->render('edit/warningDeleteCourse.html.twig', array('course'=>$course));
+	}
+	
+	/**
+	 * Export the Selected Course to zip
+	 *
+	 * NOTE: User must have ROLE_ADMIN permissions
+	 *
+	 * @Route("/course/{course_id}/export", name="export_course")
+	 */
+	public function exportCourseAction($course_id)
+	{
+		// Check if the user has ROLE_ADMIN permissions, if not, block the access
+		$this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
+	
+		// Load the CourseService
+		$courseServices = $this->get("course_services");
+	
+		// Get the Course with the specified ID
+		$course = $courseServices->getCourseByID($course_id);
+		
+		// Get all Questions for Course ( include all the question versions )
+		$questions = $courseServices->getAllQuestionForCourse($course, true);
+		
+		// Get all the Course data into an array
+		$output = array('course'=>($course),
+						'questions'=>($questions),					
+						);
+		
+		// Convert the array to json
+		$json = json_encode($output);
+		
+		// Create a Filesystem object
+		$fs = new Filesystem();
+		
+		// Generate the path of the current Course directory
+		$dir_path = $this->getParameter('courses_directory') . $course->getId() . "/";
+		
+		// Filename for the output file
+		$filename = $dir_path."/course.json";
+		
+		// Write the json to file
+		$fs->dumpFile($filename, $json);
+		
+		$files = array($filename);
+		
+		foreach ($questions as $q) {
+			if (!is_null($q->getQuestionUrl()))
+			{
+				$files[] = $dir_path . "/" . $q->getQuestionUrl();
+			}
+			if (!is_null($q->getAnswerUrl()))
+			{
+				$files[] = $dir_path . "/" . $q->getAnswerUrl();
+			}
+		}
+		
+		$zip = new \ZipArchive();
+		$zipName = $this->getParameter('export_directory').'Course-'.$course_id."-".time().".zip";
+		$zip->open($zipName,  \ZipArchive::CREATE);
+		foreach ($files as $f) {
+			$zip->addFromString(basename($f),  file_get_contents($f));
+		}
+		
+		$zip->close();
+		
+		// Render the page
+		return new Response($json);
 	}
 }

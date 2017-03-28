@@ -12,6 +12,7 @@
 
 namespace AppBundle\Entity;
 
+use JsonSerializable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
@@ -26,7 +27,7 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  * @author Federico Terzi
  *
  */
-class Question
+class Question implements JsonSerializable
 {
 	/**
 	 * @ORM\Id
@@ -345,5 +346,21 @@ class Question
     public function clearRecordedAnswers()
     {
     	$this->recordedAnswers->clear();
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see JsonSerializable::jsonSerialize()
+     */
+    public function jsonSerialize() {
+    	return array(
+    			'questionNumber'=>$this->questionNumber,
+    			'version'=>$this->version,
+    			'questionType'=>$this->questionType,
+    			'questionText'=>$this->questionText,
+    			'questionUrl'=>$this->questionUrl,
+    			'answerText'=>$this->answerText,
+    			'answerUrl'=>$this->answerUrl,
+    	);
     }
 }
