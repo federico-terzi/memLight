@@ -28,7 +28,7 @@
             			#}
             			{% for question in questions %}
             				{# Each div will have a differend id, EXAMPLE: QUESTION_12 #}
-            				<div class="quizLoadedDiv" id="QUESTION_{{ loop.index0 }}">
+            				<div class="quizLoadedDiv" id="QUESTION_{{ loop.index0 }}" number="{{ question.questionNumber }}">
             					{# If there is a question text, render it #}
                 				{% if question.questionText is not null %}
                 					<span class="quizQuestionLabel">{{ question.questionText }}</span>
@@ -48,8 +48,10 @@
         		<div class="panel panel-primary quizDiv hidden" id="answerDiv">
     				<div class="panel-heading">{% trans %}Answer{% endtrans %}</div>
         			<div class="panel-body">
-            			<a href="#" id="showAnswerBtn" class="btn btn-lg btn-success">{% trans %}Click here to Show the Answer{% endtrans %}</a>
-            			
+						<p><a href="#" id="showAnswerBtn" class="btn btn-lg btn-success">{% trans %}Click here to Show the Answer{% endtrans %}</a></p>
+						<a href="#" id="skipQuestionBtn" class="btn btn-xs btn-warning">{% trans %}Skip this question{% endtrans %}</a>
+
+
             			<!-- Answer DIVs -->
             			{# Create a separate div for each answer 
             			   Based on the current answer, most of the div will be invisible except
@@ -225,6 +227,13 @@
 			showAnswer();
         });
 
+        /**
+         When "skip question" is clicked, mark the current as correct and go ahead
+         */
+        $("#skipQuestionBtn").click(function () {
+           correctAnswer();
+        });
+
 		/**
 		When "correctBtn" is clicked, mark the answer as correct
 		*/
@@ -271,6 +280,7 @@
         {
         	$("#ANSWER_"+questions[0]).fadeIn(400);
         	$("#showAnswerBtn").hide();
+        	$("#skipQuestionBtn").hide();
         	$(".quizAnswerBtnDiv").fadeIn(400);
         }
 
@@ -286,7 +296,7 @@
         	saveState();
 
 			// Register the given answer via AJAX as CORRECT ( true )
-        	registerAnswer(questions[0], true);
+        	registerAnswer(getQuestionNumber(questions[0]), true);
         	
             // Deletes the current question
 			questions.splice(0,1);
@@ -318,7 +328,7 @@
             saveState();
 
             // Register the given answer via AJAX as WRONG ( false )
-            registerAnswer(questions[0], false);
+            registerAnswer(getQuestionNumber(questions[0]), false);
             
             // Add the current question to the end, and then delete it from the beginning
             // In this way, the wrong question is asked again after all the questions are being answered
@@ -364,6 +374,7 @@
             // Show the divs and hide the answer buttons
         	$("#QUESTION_"+questions[0]).show();
         	$("#showAnswerBtn").show();
+            $("#skipQuestionBtn").show();
         	$(".quizAnswerBtnDiv").hide();
         }
 
@@ -394,6 +405,13 @@
 		}
 
 		/**
+		Get the question number from the question index of the array
+		*/
+		function getQuestionNumber(index) {
+            return $('#QUESTION_'+index).attr('number');
+		}
+
+		/**
 		Register a given answer to the server via AJAX
 		*/
 		function registerAnswer(questionNumber, isCorrect)
@@ -410,7 +428,7 @@
 			console.log("Registering "+isCorrect+" for question: "+questionNumber);
 
 			// AJAX request url
-			var registerAnswerUrl = "{{ url('homepage') }}course/"+course+"/register_answer/"+(questionNumber+1)+"/"+isCorrect;
+			var registerAnswerUrl = "{{ url('homepage') }}course/"+course+"/register_answer/"+(questionNumber)+"/"+isCorrect;
 
 			// Send AJAX request and then prints the answer
 			$.get( registerAnswerUrl, function( data ) {
@@ -434,10 +452,10 @@
 			// Check if the quiz is ended
 			if (questions.length>0)
 			{
-				// Increment all the question numbers (because they start from 1)
+				// Get the global Question IDs
 				for(var i = 0; i<questions.length; i++)
 				{
-					questionsOut.push(questions[i]+1);
+					questionsOut.push(getQuestionNumber(questions[i]));
 				}
 			}else{
 				// QUIZ_ENDED will delete the SavedQuiz instance from the server

@@ -11,7 +11,9 @@
 /bin/
 /composer.phar
 /.metadata/
-.settings/org.eclipse.core.resources.prefs
+.settings/
+/.idea/
+.idea/
 app/check.php
 app/check.php
 app/SymfonyRequirements.php
