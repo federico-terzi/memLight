@@ -60,11 +60,6 @@ class User implements UserInterface, \Serializable
 	private $roles;
 	
 	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	private $fullName;
-	
-	/**
 	 * @ORM\OneToMany(targetEntity="Course", mappedBy="author", cascade={"remove"})
 	 */
 	private $coursesCreated;
@@ -94,12 +89,7 @@ class User implements UserInterface, \Serializable
 	
 	public function getDisplayName()
 	{
-		if($this->fullName === null)
-		{
-			return $this->username;
-		}else{
-			return $this->fullName;
-		}
+        return $this->username;
 	}
 
 	public function getUsername()

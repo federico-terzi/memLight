@@ -6,6 +6,7 @@
 			<tr>
     			<th>N</th>
     			<th>Type</th>
+    			<th>Chapter</th>
     			<th>Question Text</th>
     			<th>Question Url</th>
     			<th>Answer Text</th>
@@ -19,6 +20,7 @@
 				<tr>
 					<td>{{ question.questionNumber }}</td>
 					<td>{{ question.questionType }}</td>
+					<td>{{ question.chapter }}</td>
 					<td>{{ question.questionText }}</td>
 					
 					{% set question_path = '/courses/'~ question.course.id ~ '/' ~ question.questionUrl %}
@@ -32,7 +34,7 @@
 						<a href="{{ path('edit_question',{'question_id' : question.id}) }}" class="btn btn-success btn-xs" data-toggle="tooltip" title="Edit Question">
         					<span class="glyphicon glyphicon-pencil"></span>
         				</a>
-        				<a href="#" id="remove_{{ question.id }}" class="btn btn-danger btn-xs delete-btn" data-toggle="tooltip" title="Remove Question">
+        				<a href="#" id="remove_{{ question.id }}" class="btn btn-danger btn-xs delete-btn delete-question" data-toggle="tooltip" title="Remove Question">
         					<span class="glyphicon glyphicon-remove"></span>
         				</a>
 					</td>

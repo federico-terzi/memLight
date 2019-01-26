@@ -7,20 +7,47 @@
 {% block contentTitle %}{{ course.name }} - Quiz{% endblock %}
 
 {% block content %}
+	<script>
+		var loadedImages = 0;
+		// Total number of questions in the course
+		var totalQuestions = {{ questions|length }};
+
+		function signalLoadedImage() {
+			loadedImages++;
+			var percent = (loadedImages/totalQuestions)*100;
+			document.getElementById("progressbar").style.width = percent+"%";
+		}
+	</script>
+
 	{% if questions %}
 			<div class="progress" id="progressBarDiv">
-              <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" style="width:100%" id="progressbar">
+              <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" style="width:0%" id="progressbar">
                 <span id="progressbar-label">{% trans %}Loading{% endtrans %}...</span>
               </div>
             </div>
     		<div class="panel-group text-center">
         		<div class="panel panel-primary quizDiv">
-    				<div class="panel-heading">{% trans %}Question{% endtrans %}</div>
+					<div class="panel-heading">
+						<div class="row">
+    						<div class="col-sm-4">
+								<div class="btn-toolbar pull-left">
+									<a href="#" id="undoBtn" class="btn btn-xs btn-warning ">
+										<span class="glyphicon glyphicon-backward" aria-hidden="true"></span> {% trans %}Undo{% endtrans %}
+									</a>
+									<a href="#" id="shuffleBtn" class="btn btn-xs btn-success">
+										<span class="glyphicon glyphicon-random" aria-hidden="true"></span>
+										<span id="shuffleBtnText">{% trans %}Shuffle{% endtrans %} ON</span>
+									</a>
+								</div>
+							</div>
+    						<div class="col-sm-4">{% trans %}Question{% endtrans %}</div>
+    						<div class="col-sm-4"><a href="#" id="syncBtn" class="btn btn-xs btn-warning pull-right">Loading</a></div>
+						</div>
+					</div>
         			<div class="panel-body">
         				<!-- Loading bar visible when images are loading -->
-        				<img src="{{ asset('images/loadingBar.gif') }}" id="loadingImage"/>
             			<p class="quizQuestionLabel" id="loadingLabel">{% trans %}Loading{% endtrans %}...</p>
-            			
+
             			<!-- Question DIVs -->
             			{# Create a separate div for each question 
             			   Based on the current question, most of the div will be invisible except
@@ -69,7 +96,7 @@
                 				{% if question.answerUrl is not null %}
                 					{% set image_path = '/courses/'~ question.course.id ~ '/' ~ question.answerUrl %}
                 					<a href="#" data-featherlight={{ asset(image_path) }}>
-                            			<img src="{{ asset(image_path) }}" class="questionListImg" />
+                            			<img src="{{ asset(image_path) }}" class="questionListImg" onload="signalLoadedImage()"/>
                             		</a>
                 				{% endif %}
                 			</div>
@@ -140,10 +167,6 @@
 {# Contains the js needed to make the quiz work #}
 {% block javascripts %}
     <script>
-
-		// Total number of questions in the course
-    	var totalQuestions = {{ questions|length }};
-
     	// Course id
     	var course = {{ course.id }};
 
@@ -173,6 +196,9 @@
 
     	// Count the number of questions answered not correctly
     	var wrongCount = 0;
+
+    	// If true, questions will be shuffled
+    	var shuffleEnabled = true;
     	
         $( document ).ready(function() {
         	console.log( "Page Ready, loading the questions..." );
@@ -182,11 +208,6 @@
 			{
 				questions.push(i);
 			}
-			
-			{% if quizParams.shuffle %}
-				// If shuffle is enabled, shuffle the question order
-				questions = shuffle(questions);
-			{% endif %}
 
 			// If alertRecoverQuiz is enabled, alert the user of an already started quiz and
 			// ask if he would like to continue it
@@ -203,6 +224,9 @@
 		            });
 				}
 			}
+
+			// If shuffle is enabled, shuffle the question order
+			questions = shuffle(questions);
         });
 
         /**
@@ -210,11 +234,12 @@
         */
         $( window ).on( "load", function() {
         	$("#QUESTION_"+questions[0]).show();
-        	$("#loadingLabel").hide();		
-        	$("#loadingImage").hide();		
+        	$("#loadingLabel").hide();
         	$("#answerDiv").removeClass("hidden");
 			$("#progressbar").removeClass("progress-bar-warning");
 			$("#progressbar").addClass("progress-bar-success");
+
+			insync();
 
         	// Update the quiz status
         	updateStatus();
@@ -247,6 +272,40 @@
         $("#wrongBtn").click(function () {
 			wrongAnswer();
         });
+
+        /**
+		 * Save quiz when clicking on the sync button
+		 */
+        $("#syncBtn").click(function () {
+        	saveQuiz();
+		});
+
+		/**
+		 * Undo button
+		 */
+		$("#undoBtn").click(function () {
+			undoQuiz();
+		});
+
+		/**
+		 * Shuffle button
+		 */
+		$("#shuffleBtn").click(function () {
+			// Hide the current question
+			hideCurrent();
+
+			if (shuffleEnabled) {
+				questions = unshuffle(questions);
+				shuffleEnabled = false;
+			}else{
+				questions = shuffle(questions);
+				shuffleEnabled = true;
+			}
+
+			showCurrent();
+
+			renderShuffleBtn();
+		});
 
 		/**
 		Key bindings for keyboard shortcuts
@@ -443,6 +502,8 @@
 		*/
 		function saveQuiz()
 		{
+			syncing();
+
 			// Logs
 			console.log("Saving the quiz...");
 
@@ -468,7 +529,15 @@
 			// Send the questions to the server via POST and then print the response
 			$.post( saveQuizUrl, { questions: questionString }).done(function( data ) {
 				console.log("Response SAVE_QUIZ: "+data);
-            });
+
+				if (data == "OK") {
+					insync();
+				}else{
+					syncerror("Not logged in");
+				}
+            }).error(function(data) {
+				syncerror("Offline");
+			});
 		}
 
 		/**
@@ -524,5 +593,46 @@
             
             return array;
         }
+
+		/**
+		Unshuffle the array by ordering it.
+		 */
+		function unshuffle(array) {
+			array.sort();
+			return array;
+		}
+
+        function syncing() {
+			$('#syncBtn').text("Syncing");
+			$('#syncBtn').addClass("btn-warning");
+			$('#syncBtn').removeClass("btn-success");
+			$('#syncBtn').removeClass("btn-danger");
+		}
+
+		function insync() {
+			$('#syncBtn').text("In Sync");
+			$('#syncBtn').removeClass("btn-warning");
+			$('#syncBtn').addClass("btn-success");
+			$('#syncBtn').removeClass("btn-danger");
+		}
+
+		function syncerror(msg) {
+			$('#syncBtn').text("Sync Error: "+msg );
+			$('#syncBtn').removeClass("btn-warning");
+			$('#syncBtn').removeClass("btn-success");
+			$('#syncBtn').addClass("btn-danger");
+		}
+
+		function renderShuffleBtn() {
+			if (shuffleEnabled) {
+				$('#shuffleBtnText').text("{% trans %}Shuffle{% endtrans %} ON");
+				$('#shuffleBtn').removeClass("btn-danger");
+				$('#shuffleBtn').addClass("btn-success");
+			}else{
+				$('#shuffleBtnText').text("{% trans %}Shuffle{% endtrans %} OFF");
+				$('#shuffleBtn').addClass("btn-danger");
+				$('#shuffleBtn').removeClass("btn-success");
+			}
+		}
     </script>
 {% endblock %}

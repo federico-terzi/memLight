@@ -13,7 +13,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Course;
+use AppBundle\Entity\CourseChapter;
 use AppBundle\Entity\Question;
+use AppBundle\Form\ChapterType;
 use AppBundle\Form\CourseType;
 use AppBundle\Form\QuestionType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -109,7 +111,7 @@ class EditController extends Controller
 		$oldQuestionUrl = $question->getQuestionUrl();
 		
 		// Build the form
-		$form = $this->createForm(QuestionType::class, $question);
+		$form = $this->createForm(QuestionType::class, $question, array('course' => $course));
 		
 		// Handle the submit request
 		$form->handleRequest($request);
@@ -231,7 +233,7 @@ class EditController extends Controller
 		$course = $courseServices->getCourseByID($course_id);
 		
 		// Build the form
-		$form = $this->createForm(QuestionType::class, $newQuestion);
+		$form = $this->createForm(QuestionType::class, $newQuestion, array('course' => $course));
 	
 		// Handle the submit request
 		$form->handleRequest($request);
@@ -674,4 +676,167 @@ class EditController extends Controller
 		// Returns the zip file
 		return $response;
 	}
+
+    /**
+     * Render the list of chapters for the specified Course
+     *
+     * @param Course $course
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editChapterListAction($course)
+    {
+        // Get the Course Service
+        $courseServices = $this->get("course_services");
+
+        // Fetch all the questions for the specified Course
+        $chapters = $courseServices->getChaptersForCourse($course);
+
+        // Pass the questions and render the list
+        return $this->render('edit/editChapterList.html.twig', array('chapters' => $chapters));
+    }
+
+    /**
+     * Action used to "Add a Chapter" by providing a form where user can write all the information
+     *
+     * NOTE: User must have ROLE_ADMIN permissions
+     *
+     * @Route("/course/{course_id}/add_chapter", name="add_chapter")
+     */
+    public function addChapterAction(Request $request, $course_id)
+    {
+        // Check if the user has ROLE_ADMIN permissions, if not, block the access
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
+
+        $newChapter = new CourseChapter();
+
+        // Load the CourseService
+        $courseServices = $this->get("course_services");
+
+        // Get the Course with the specified ID
+        $course = $courseServices->getCourseByID($course_id);
+
+        // Build the form
+        $form = $this->createForm(ChapterType::class, $newChapter);
+
+        // Handle the submit request
+        $form->handleRequest($request);
+
+        // When the form is submitted
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Set the Course
+            $newChapter->setCourse($course);
+
+            // Get the Doctrine Manager
+            $em = $this->getDoctrine()->getManager();
+
+            // Persist the new question to the database
+            $em->persist($newChapter);
+
+            // Commit to the database
+            $em->flush();
+
+            // Redirect to the Course control panel
+            return $this->redirectToRoute('edit_course', array('course_id'=>$course->getId()));
+        }
+
+        // Pass the form and render the page
+        return $this->render(
+            'edit/addChapter.html.twig',
+            array('form' => $form->createView())
+        );
+    }
+
+    /**
+     * Action used to "Edit a Chapter" by providing a form where user can modify all the information
+     *
+     * NOTE: User must have ROLE_ADMIN permissions
+     *
+     * @Route("/chapter/{chapter_id}/edit", name="edit_chapter")
+     */
+    public function editChapterAction(Request $request, $chapter_id)
+    {
+        // Check if the user has ROLE_ADMIN permissions, if not, block the access
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
+
+        // Load the chapter repository
+        $repository = $this->getDoctrine()->getRepository("AppBundle:CourseChapter");
+
+        // Fetch the specified chapter
+        $chapter = $repository->find($chapter_id);
+
+        // If there are no chapters with the specified ID, throw an exception
+        if(!$chapter)
+        {
+            throw $this->createNotFoundException("CHAPTER NOT FOUND WITH ID:".$chapter_id);
+        }
+
+        $course = $chapter->getCourse();
+
+        // Build the form
+        $form = $this->createForm(ChapterType::class, $chapter);
+
+        // Handle the submit request
+        $form->handleRequest($request);
+
+        // When the form is submitted
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Get the Doctrine Manager
+            $em = $this->getDoctrine()->getManager();
+
+            // Persist the new chapter to the database
+            $em->persist($chapter);
+
+            // Commit to the database
+            $em->flush();
+
+            // Redirect to the Course control panel
+            return $this->redirectToRoute('edit_course', array('course_id'=>$course->getId()));
+        }
+
+        // Pass the form and render the page
+        return $this->render(
+            'edit/editChapter.html.twig',
+            array('form' => $form->createView())
+        );
+
+    }
+
+    /**
+     * Action used to "Delete a Chapter"
+     *
+     * NOTE: User must have ROLE_ADMIN permissions
+     *
+     * @Route("/chapter/{chapter_id}/remove", name="remove_chapter")
+     */
+    public function removeChapterAction(Request $request, $chapter_id)
+    {
+        // Check if the user has ROLE_ADMIN permissions, if not, block the access
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
+
+        // Load the chapter repository
+        $repository = $this->getDoctrine()->getRepository("AppBundle:CourseChapter");
+
+        // Fetch the specified chapter
+        $chapter = $repository->find($chapter_id);
+
+        // If there are no chapters with the specified ID, throw an exception
+        if(!$chapter)
+        {
+            throw $this->createNotFoundException("CHAPTER NOT FOUND WITH ID:".$chapter_id);
+        }
+
+        $course = $chapter->getCourse();
+
+        // Get the Doctrine Manager
+        $em = $this->getDoctrine()->getManager();
+
+        $em->remove($chapter);
+
+        // Commit to database
+        $em->flush();
+
+        // Redirect to the Course control panel
+        return $this->redirectToRoute('edit_course', array('course_id'=>$course->getId()));
+
+    }
 }

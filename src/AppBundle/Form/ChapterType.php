@@ -12,37 +12,33 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\User;
+use AppBundle\AppBundle;
+use AppBundle\Entity\CourseChapter;
+use AppBundle\Entity\Question;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Form used for the User Registration
+ * Form used to Add/Edit Chapters to a specific Course
  * 
  * @author Federico Terzi
  */
-class UserType extends AbstractType
+class ChapterType extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-		->add('username', TextType::class)
-		->add('plainPassword', RepeatedType::class, array(
-				'type' => PasswordType::class,
-				'first_options'  => array('label' => 'Password'),
-				'second_options' => array('label' => 'Repeat Password'),
-		))
-		;
+		->add('name', TextType::class, array('label'=>'Chapter name', 'required'=>false));
 	}
 
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults(array(
-				'data_class' => User::class,
+				'data_class' => CourseChapter::class,
 		));
 	}
 }

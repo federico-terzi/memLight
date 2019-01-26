@@ -50,6 +50,12 @@ class Question implements JsonSerializable
 	 * @ORM\Column(type="integer")
 	 */
 	private $version = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CourseChapter")
+     * @ORM\JoinColumn(name="chapter_id", referencedColumnName="id")
+     */
+    private $chapter;
 	
 	/**
 	 * @ORM\Column(type="string", length=20)
@@ -159,6 +165,22 @@ class Question implements JsonSerializable
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChapter()
+    {
+        return $this->chapter;
+    }
+
+    /**
+     * @param mixed $chapter
+     */
+    public function setChapter($chapter)
+    {
+        $this->chapter = $chapter;
     }
 
     /**
@@ -356,6 +378,7 @@ class Question implements JsonSerializable
     	return array(
     			'questionNumber'=>$this->questionNumber,
     			'version'=>$this->version,
+    			'chapter'=>$this->chapter,
     			'questionType'=>$this->questionType,
     			'questionText'=>$this->questionText,
     			'questionUrl'=>$this->questionUrl,

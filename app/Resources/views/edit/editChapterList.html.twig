@@ -1,0 +1,32 @@
+{# Render a table with all questions for a specific course #}
+
+{% if chapters %}
+	<table class="table table-striped text-left">
+		<thead>
+			<tr>
+    			<th>ID</th>
+    			<th>Name</th>
+    			<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for chapter in chapters %}
+				<tr>
+					<td>{{ chapter.id }}</td>
+					<td>{{ chapter.name }}</td>
+
+					<td>
+						<a href="{{ path('edit_chapter',{'chapter_id' : chapter.id}) }}" class="btn btn-success btn-xs" data-toggle="tooltip" title="Edit Chapter">
+        					<span class="glyphicon glyphicon-pencil"></span>
+        				</a>
+        				<a href="#" id="remove_{{ chapter.id }}" class="btn btn-danger btn-xs delete-btn delete-chapter" data-toggle="tooltip" title="Remove Chapter">
+        					<span class="glyphicon glyphicon-remove"></span>
+        				</a>
+					</td>
+				</tr>
+        	{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>There are no chapters in this course...</p>
+{% endif %}

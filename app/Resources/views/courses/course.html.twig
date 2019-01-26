@@ -49,6 +49,34 @@
                     {% if app.user %}
                     	<a href="{{ path('mistaken_quiz', { 'course_id' : course.id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-fire"></span> {% trans %}Quiz Most Mistaken{% endtrans %}!</a>
                     {% endif %}
+
+					{% if chapters %}
+						<br><br>
+						<p>You can also test individual chapters:</p>
+
+						<table class="table table-striped text-left">
+							<thead>
+							<tr>
+								<th>Chapter</th>
+								<th>Questions</th>
+								<th>Actions</th>
+							</tr>
+							</thead>
+							<tbody>
+							{% for chapter in chapters %}
+								<tr>
+									<td>{{ chapter.name }}</td>
+									<td>{{ chapter.questions|length }}</td>
+									<td>
+										<a href="{{path("quiz", {'course_id' : course.id, 'chapter_id': chapter.id}) }}" class="btn btn-success btn-xs pull-right" data-toggle="tooltip" title="Edit Question">
+											<span class="glyphicon glyphicon-play"></span> Start Quiz
+										</a>
+									</td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+					{% endif %}
         		</div>
         	</div>
 		</div>

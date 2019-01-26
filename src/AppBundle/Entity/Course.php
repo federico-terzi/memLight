@@ -66,7 +66,23 @@ class Course implements JsonSerializable
 	 * @ORM\OneToMany(targetEntity="SavedQuiz", mappedBy="course", cascade={"remove"})
 	 */
 	private $savedQuizzes;
-	
+
+    /**
+     * @ORM\OneToMany(targetEntity="CourseChapter", mappedBy="course", cascade={"remove"})
+     */
+    private $chapters;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->recordedAnswers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->savedQuizzes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->chapters = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get id
      *
@@ -168,15 +184,6 @@ class Course implements JsonSerializable
     {
         return $this->longDescription;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->recordedAnswers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->savedQuizzes = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add questions
@@ -245,6 +252,14 @@ class Course implements JsonSerializable
     }
 
     /**
+     * @return mixed
+     */
+    public function getChapters()
+    {
+        return $this->chapters;
+    }
+
+    /**
      * Add savedQuizzes
      *
      * @param \AppBundle\Entity\SavedQuiz $savedQuizzes
@@ -275,7 +290,8 @@ class Course implements JsonSerializable
     public function getSavedQuizzes()
     {
         return $this->savedQuizzes;
-    }
+    }
+
 	/**
 	 * {@inheritDoc}
 	 * @see JsonSerializable::jsonSerialize()

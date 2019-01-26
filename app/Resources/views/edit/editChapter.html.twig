@@ -1,0 +1,25 @@
+{% extends 'layout.html.twig' %}
+
+{% set active_page="courses" %}
+
+{% block pageName %}Edit Chapter{% endblock %}
+
+{% block contentTitle %}Edit Chapter{% endblock %}
+
+{% block content %}
+	<div class="panel panel-info">
+		<div class="panel-heading">Edit Chapter</div>
+		<div class="panel-body">
+			{# Render the form #}
+            {{ form_start(form) }}
+            	{{ form_errors(form) }}
+
+				{{ form_row(form.name) }}
+
+            	<div class="form-group">
+                	<button type="submit" class="btn btn-success btn-lg">Edit Chapter</button>
+                </div>
+            {{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}

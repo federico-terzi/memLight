@@ -13,7 +13,10 @@
 namespace AppBundle\Form;
 
 use AppBundle\AppBundle;
+use AppBundle\Entity\CourseChapter;
 use AppBundle\Entity\Question;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -32,6 +35,13 @@ class QuestionType extends AbstractType
 	{
 		$builder
 		->add('questionType', ChoiceType::class, array('label'=>'Question Type', 'choices' => AppBundle::$questionTypes, 'choices_as_values'=>true))
+		->add('chapter', EntityType::class, array('label'=>'Chapter',
+            'class' => CourseChapter::class,
+            'query_builder' => function (EntityRepository $repo) use ($options) {
+                return $repo->createQueryBuilder('c')
+                    ->where('c.course = :course')
+                    ->setParameter('course', $options["course"]);
+            }, 'required'=>false))
 		->add('questionText', TextType::class, array('label'=>'Question Text', 'required'=>false))
 		->add('questionUrl', FileType::class, array('label'=>'Question URL', 'required'=>false, 'data_class'=>null))
 		->add('answerText', TextType::class, array('label'=>'Answer Text', 'required'=>false))
@@ -43,5 +53,7 @@ class QuestionType extends AbstractType
 		$resolver->setDefaults(array(
 				'data_class' => Question::class,
 		));
+
+		$resolver->setRequired(array('course'));
 	}
 }

@@ -16,6 +16,9 @@
 			<a href="{{ path('add_question', {'course_id': course.id }) }}" class="btn btn-success">
     			<span class="glyphicon glyphicon-plus-sign"></span> Add Question
     		</a>
+			<a href="{{ path('add_chapter', {'course_id': course.id }) }}" class="btn btn-success">
+				<span class="glyphicon glyphicon-plus-sign"></span> Add Chapter
+			</a>
 			<a href="{{ path('edit_course_info', {'course_id': course.id }) }}" class="btn btn-warning">
     			<span class="glyphicon glyphicon-pencil"></span> Edit Course Info
     		</a>
@@ -28,6 +31,15 @@
     		
     	</div>
 	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Chapters
+		</div>
+		<div class="panel-body">
+			{{ render(controller('AppBundle:Edit:editChapterList', {'course': course })) }}
+		</div>
+	</div>
+
 	{# Render a question list #}
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -43,17 +55,29 @@
 {% block javascripts %}
 <script>
 	// Destination url to remove a question with a XXX placeholder
-    var removeUrl = "{{ path('remove_question',{'question_id' : 'XXX'}) }}";
-    
-    $('.delete-btn' ).click(function() {
+    var removeQuestionUrl = "{{ path('remove_question',{'question_id' : 'XXX'}) }}";
+    var removeChapterUrl = "{{ path('remove_chapter',{'chapter_id' : 'XXX'}) }}";
+
+    $('.delete-question' ).click(function() {
         // Ask for confirmation
     	if (confirm('Do you really want to delete the question?')) {
     		console.log(this.id);
     		// Get the question ID
     		var questionId = this.id.split("_")[1];
     		// Replace the placeholder and go to location
-     		window.location.href = removeUrl.replace('XXX', questionId);
+     		window.location.href = removeQuestionUrl.replace('XXX', questionId);
     	}
     });
+
+	$('.delete-chapter' ).click(function() {
+		// Ask for confirmation
+		if (confirm('Do you really want to delete the chapter?')) {
+			console.log(this.id);
+			// Get the chapter ID
+			var chapterId = this.id.split("_")[1];
+			// Replace the placeholder and go to location
+			window.location.href = removeChapterUrl.replace('XXX', chapterId);
+		}
+	});
 </script>
 {% endblock %}

@@ -63,6 +63,8 @@ class CoursesController extends Controller
 		
 		// Get the Course with the specified ID
 		$course = $courseServices->getCourseByID($course_id);
+
+		$chapters = $course->getChapters();
 		
 		// Used later to determine if a user has already started a quiz
 		$hasAlreadyStartedQuiz = false;
@@ -77,7 +79,7 @@ class CoursesController extends Controller
 			$hasAlreadyStartedQuiz = $courseServices->doesCourseHaveSavedQuizForUser($course, $user);
 		}
 		
-		return $this->render('courses/course.html.twig', array('course'=>$course, 'already_started'=>$hasAlreadyStartedQuiz));
+		return $this->render('courses/course.html.twig', array('course'=>$course, 'chapters' => $chapters, 'already_started'=>$hasAlreadyStartedQuiz));
 	}
 	
 	/**

@@ -12,6 +12,7 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Entity\CourseChapter;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Entity\Course;
 use AppBundle\Entity\Question;
@@ -39,7 +40,7 @@ class CourseServices {
 	 * @param Course $course
 	 * @return Question[]|null
 	 */
-	public function getAllQuestionForCourse($course, $includeVersions = false)
+	public function getAllQuestionForCourse($course, $includeVersions = false, $chapter = null)
 	{
 		// Get doctrine manager
 		$manager = $this->doctrine->getManager();
@@ -50,17 +51,21 @@ class CourseServices {
 			$query = $manager->createQuery('SELECT q
 								    FROM AppBundle:Question q
 								    WHERE q.course = :course
+								    AND ( q.chapter = :chapter OR :chapter is NULL )
 									AND q.version >= (SELECT MAX(q2.version) FROM AppBundle:Question q2
 													  WHERE q2.course = q.course AND q2.questionNumber = q.questionNumber)
 								    ORDER BY q.questionNumber ASC'
-					)->setParameter('course', $course);
+					)->setParameter('course', $course)
+                     ->setParameter('chapter', $chapter);
 		}else{
 			// Find all the versions of the questions for the specified course
 			$query = $manager->createQuery('SELECT q
 								    FROM AppBundle:Question q
 								    WHERE q.course = :course
+								    AND ( q.chapter = :chapter OR :chapter is NULL )
 								    ORDER BY q.questionNumber ASC'
-					)->setParameter('course', $course);
+					)->setParameter('course', $course)
+                     ->setParameter('chapter', $chapter);
 		}
 		
 		// Get the results
@@ -75,6 +80,38 @@ class CourseServices {
 		// Return the questions or null if there are no questions for the course
 		return $questions;
 	}
+
+    /**
+     * Return all Chapters for the specified Course
+     * If no chapters are found, return NULL
+     *
+     * @param Course $course
+     * @return CourseChapter[]|null
+     */
+    public function getChaptersForCourse($course)
+    {
+        // Get doctrine manager
+        $manager = $this->doctrine->getManager();
+
+        // Find chapters for the specified course
+        $query = $manager->createQuery('SELECT c
+								    FROM AppBundle:CourseChapter c
+								    WHERE c.course = :course
+								    ORDER BY c.id ASC'
+        )->setParameter('course', $course);
+
+        // Get the results
+        $chapters = $query->getResult();
+
+        // If there are no chapters return null
+        if (count($chapters)==0)
+        {
+            $chapters = null;
+        }
+
+        // Return the chapters or null if there are no chapters for the course
+        return $chapters;
+    }
 	
 	/**
 	 * Return an array of questions for the specified course and array of question's IDs.

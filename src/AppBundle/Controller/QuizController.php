@@ -31,9 +31,9 @@ class QuizController extends Controller
 	/**
 	 * Render the Quiz with all questions for a specified course 
 	 * 
-	 * @Route("/course/{course_id}/quiz/all", name="quiz")
+	 * @Route("/course/{course_id}/quiz/all/{chapter_id}", name="quiz", defaults={"chapter_id"=null})
 	 */
-	public function quizAction($course_id)
+	public function quizAction($course_id, $chapter_id)
 	{
 		// Load the CourseService
 		$courseServices = $this->get("course_services");
@@ -66,10 +66,10 @@ class QuizController extends Controller
 		}
 		
 		// Define the parameters for the quiz
-		$quizParams = array('shuffle'=>true, 'recover'=>$completeAlreadyStartedQuiz);
+		$quizParams = array('recover'=>$completeAlreadyStartedQuiz);
 		
 		// Get all the questions for the current course
-		$questions = $courseServices->getAllQuestionForCourse($course);
+		$questions = $courseServices->getAllQuestionForCourse($course, false, $chapter_id);
 		
 		// Pass the parameters and render the quiz
 		return $this->render('quiz/quiz.html.twig', array('course'=>$course, 'questions' => $questions, 'quizParams' => $quizParams));
@@ -88,7 +88,7 @@ class QuizController extends Controller
 		$this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
 		
 		// Define the quiz parameters
-		$quizParams = array('shuffle'=>true, 'recover'=>false);
+		$quizParams = array('recover'=>false);
 		
 		// Load the CourseService
 		$courseServices = $this->get("course_services");
@@ -130,7 +130,7 @@ class QuizController extends Controller
 		$this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
 		
 		// Define the Quiz parameters
-		$quizParams = array('shuffle'=>true, 'recover'=>false);
+		$quizParams = array('recover'=>false);
 		
 		// Load the CourseService
 		$courseServices = $this->get("course_services");
