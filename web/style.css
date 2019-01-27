@@ -105,3 +105,39 @@ p, div {
 #widget-container {
 	display: none;
 }
+
+.dark {
+	background-color: black;
+	color: white;
+}
+
+.dark table {
+	border: transparent;
+}
+
+.dark > .navbar {
+	background-color: black;
+}
+
+.dark .panel {
+	background-color: black;
+	border-color: #262626;
+}
+
+.dark .panel-heading {
+	background-color: #262626;
+	border: transparent;
+	color: white;
+}
+
+.dark .btn {
+	background-color: transparent;
+}
+
+.dark .questionListImg{
+	filter: invert(1);
+}
+
+.dark .progress{
+	background-color: black;
+}

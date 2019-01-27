@@ -38,6 +38,10 @@
 										<span class="glyphicon glyphicon-random" aria-hidden="true"></span>
 										<span id="shuffleBtnText">{% trans %}Shuffle{% endtrans %} ON</span>
 									</a>
+
+									<a href="#" id="darkBtn" class="btn btn-xs btn-info ">
+										<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {% trans %}Dark Mode{% endtrans %}
+									</a>
 								</div>
 							</div>
     						<div class="col-sm-4">{% trans %}Question{% endtrans %}</div>
@@ -199,6 +203,8 @@
 
     	// If true, questions will be shuffled
     	var shuffleEnabled = {{ quizParams.defaultShuffle ? 'true':'false' }};
+
+    	var darkMode = false;
     	
         $( document ).ready(function() {
         	console.log( "Page Ready, loading the questions..." );
@@ -290,6 +296,17 @@
 			undoQuiz();
 		});
 
+		/**
+		 * Dark button
+		 */
+		$("#darkBtn").click(function () {
+			darkMode = !darkMode;
+			if (darkMode) {
+				$('body').addClass("dark");
+			}else{
+				$('body').removeClass("dark");
+			}
+		});
 		/**
 		 * Shuffle button
 		 */
