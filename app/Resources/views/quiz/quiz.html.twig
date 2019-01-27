@@ -198,7 +198,7 @@
     	var wrongCount = 0;
 
     	// If true, questions will be shuffled
-    	var shuffleEnabled = true;
+    	var shuffleEnabled = {{ quizParams.defaultShuffle ? 'true':'false' }};
     	
         $( document ).ready(function() {
         	console.log( "Page Ready, loading the questions..." );
@@ -226,7 +226,10 @@
 			}
 
 			// If shuffle is enabled, shuffle the question order
-			questions = shuffle(questions);
+			if (shuffleEnabled) {
+				questions = shuffle(questions);
+			}
+			renderShuffleBtn();
         });
 
         /**
@@ -598,7 +601,7 @@
 		Unshuffle the array by ordering it.
 		 */
 		function unshuffle(array) {
-			array.sort();
+			array.sort(function (a, b) {  return a - b;  });
 			return array;
 		}
 

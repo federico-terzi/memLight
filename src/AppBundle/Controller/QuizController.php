@@ -66,7 +66,7 @@ class QuizController extends Controller
 		}
 		
 		// Define the parameters for the quiz
-		$quizParams = array('recover'=>$completeAlreadyStartedQuiz);
+		$quizParams = array('recover'=>$completeAlreadyStartedQuiz, 'defaultShuffle' => true);
 		
 		// Get all the questions for the current course
 		$questions = $courseServices->getAllQuestionForCourse($course, false, $chapter_id);
@@ -88,7 +88,7 @@ class QuizController extends Controller
 		$this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
 		
 		// Define the quiz parameters
-		$quizParams = array('recover'=>false);
+		$quizParams = array('recover'=>false, 'defaultShuffle' => false);
 		
 		// Load the CourseService
 		$courseServices = $this->get("course_services");
@@ -130,7 +130,7 @@ class QuizController extends Controller
 		$this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
 		
 		// Define the Quiz parameters
-		$quizParams = array('recover'=>false);
+		$quizParams = array('recover'=>false, 'defaultShuffle' => true);
 		
 		// Load the CourseService
 		$courseServices = $this->get("course_services");

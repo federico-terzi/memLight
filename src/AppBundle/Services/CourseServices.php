@@ -137,16 +137,27 @@ class CourseServices {
 				)->setParameter('course', $course)->setParameter('questions', $questions);
 		
 		// Get the result
-		$questions = $query->getResult();
-		
+		$results = $query->getResult();
+
+		// Now order them in the same order of the given saved quiz
+        $orderedQuestions = array();
+        foreach($questions as $questionNumber) {
+            foreach($results as $result) {
+                if ($result->getQuestionNumber()== $questionNumber) {
+                    array_push($orderedQuestions, $result);
+                    break;
+                }
+            }
+        }
+
 		// If there are no questions return null
-		if (count($questions)==0)
+		if (count($orderedQuestions)==0)
 		{
-			$questions = null;
+			$orderedQuestions = null;
 		}
 		
 		// Return the questions or null if no question was found
-		return $questions;
+		return $orderedQuestions;
 	}
 	
 	/**
