@@ -141,3 +141,12 @@ p, div {
 .dark .progress{
 	background-color: black;
 }
+
+.focus {
+	overflow-y: scroll;
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none;  /* IE 10+ */
+}
+.focus::-webkit-scrollbar { /* WebKit */
+	width: 0px;
+}

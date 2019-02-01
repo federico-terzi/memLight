@@ -42,6 +42,10 @@
 									<a href="#" id="darkBtn" class="btn btn-xs btn-info ">
 										<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {% trans %}Dark Mode{% endtrans %}
 									</a>
+
+									<a href="#" id="focusBtn" class="btn btn-xs btn-info ">
+										<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span> {% trans %}Focus Mode{% endtrans %}
+									</a>
 								</div>
 							</div>
     						<div class="col-sm-4">{% trans %}Question{% endtrans %}</div>
@@ -99,9 +103,7 @@
                 				{# If the question has an answer image, render it#}
                 				{% if question.answerUrl is not null %}
                 					{% set image_path = '/courses/'~ question.course.id ~ '/' ~ question.answerUrl %}
-                					<a href="#" data-featherlight={{ asset(image_path) }}>
-                            			<img src="{{ asset(image_path) }}" class="questionListImg" onload="signalLoadedImage()"/>
-                            		</a>
+									<img src="{{ asset(image_path) }}" class="questionListImg" onload="signalLoadedImage()"/>
                 				{% endif %}
                 			</div>
                 		{% endfor %}
@@ -205,6 +207,7 @@
     	var shuffleEnabled = {{ quizParams.defaultShuffle ? 'true':'false' }};
 
     	var darkMode = false;
+    	var focusMode = false;
     	
         $( document ).ready(function() {
         	console.log( "Page Ready, loading the questions..." );
@@ -307,6 +310,19 @@
 				$('body').removeClass("dark");
 			}
 		});
+
+		/**
+		 * Focus mode button
+		 */
+		$("#focusBtn").click(function () {
+			focusMode = !focusMode;
+			if (focusMode) {
+				turnOnFocusMode();
+			}else{
+				turnOffFocusMode();
+			}
+		});
+
 		/**
 		 * Shuffle button
 		 */
@@ -466,6 +482,7 @@
         	$(".quizDiv").hide();
         	$("#progressBarDiv").hide();
         	$('#summaryBox').removeClass('hidden');
+        	turnOffFocusMode();
         }
 
 		/**
@@ -652,6 +669,42 @@
 				$('#shuffleBtnText').text("{% trans %}Shuffle{% endtrans %} OFF");
 				$('#shuffleBtn').addClass("btn-danger");
 				$('#shuffleBtn').removeClass("btn-success");
+			}
+		}
+
+		function turnOnFocusMode(){
+			openFullscreen();
+			$('.navbar').css('display', 'none');
+			$('body').addClass("focus");
+		}
+
+		function turnOffFocusMode(){
+			exitFullscreen();
+			$('.navbar').css('display', '');
+			$('body').removeClass("focus");
+		}
+
+		function openFullscreen() {
+			if (document.documentElement.requestFullscreen) {
+				document.documentElement.requestFullscreen();
+			} else if (document.documentElement.mozRequestFullScreen) { /* Firefox */
+				document.documentElement.mozRequestFullScreen();
+			} else if (document.documentElement.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+				document.documentElement.webkitRequestFullscreen();
+			} else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
+				document.documentElement.msRequestFullscreen();
+			}
+		}
+
+		function exitFullscreen() {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			} else if (document.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document.msExitFullscreen) {
+				document.msExitFullscreen();
 			}
 		}
     </script>
